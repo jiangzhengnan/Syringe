@@ -21,6 +21,10 @@ public class SplashActivity extends Activity {
 
         if (FixDexUtil.isGoingToFix(this)) {
             LogUtils.d("需要热修复");
+            //从网络 下载补丁并存储到手机本地
+            //https://raw.githubusercontent.com/jiangzhengnan/Syringe/master/DexDir/BugTest.dex
+
+
             FixDexUtil.loadFixedDex(this, Environment.getExternalStorageDirectory());
         } else {
             LogUtils.d("不需要热修复");
