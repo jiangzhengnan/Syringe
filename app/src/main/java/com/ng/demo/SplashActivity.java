@@ -44,13 +44,14 @@ public class SplashActivity extends PermissionsActivity {
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.R ||
                 Environment.isExternalStorageManager()) {
             Toast.makeText(this, "已获得访问所有文件权限", Toast.LENGTH_SHORT).show();
-            //downLoadDex();
+            LogUtils.d("直接热修复");
             runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
                     beginHotFix();
                 }
             });
+            //downLoadDex();
         } else {
             AlertDialog.Builder builder = new AlertDialog.Builder(this)
                     .setMessage("本程序需要您同意允许访问所有文件权限")
@@ -124,6 +125,12 @@ public class SplashActivity extends PermissionsActivity {
         } else {
             LogUtils.d("不需要热修复");
         }
+
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+            }
+        });
 
         new Thread(new Runnable() {
             @Override

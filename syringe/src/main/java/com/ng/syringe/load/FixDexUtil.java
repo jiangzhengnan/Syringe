@@ -94,14 +94,14 @@ public class FixDexUtil {
         }
         try {
             // 1.加载应用程序dex的Loader
-            PathClassLoader pathLoader = (PathClassLoader) appContext.getClassLoader();
+            PathClassLoader appClassLoader = (PathClassLoader) appContext.getClassLoader();
             for (File dex : loadedDex) {
                 // 2.加载指定的修复的dex文件的Loader
                 DexClassLoader dexLoader = new DexClassLoader(
                         dex.getAbsolutePath(),// 修复好的dex（补丁）所在目录
-                        dexDir.getAbsolutePath(),// 存放dex的解压目录（用于jar、zip、apk格式的补丁）
+                        null,// 存放dex的解压目录（用于jar、zip、apk格式的补丁）
                         null,// 加载dex时需要的库
-                        pathLoader// 父类加载器
+                        appClassLoader// 父类加载器
                 );
                 // 3.开始合并
                 // 合并的目标是Element[],重新赋值它的值即可
@@ -114,7 +114,7 @@ public class FixDexUtil {
 
                 //3.1 准备好pathList的引用
                 Object dexPathList = getPathList(dexLoader);
-                Object pathPathList = getPathList(pathLoader);
+                Object pathPathList = getPathList(appClassLoader);
                 //3.2 从pathList中反射出element集合
                 Object leftDexElements = getDexElements(dexPathList);
                 Object rightDexElements = getDexElements(pathPathList);
@@ -122,10 +122,9 @@ public class FixDexUtil {
                 Object dexElements = combineArray(leftDexElements, rightDexElements);
 
                 // 重写给PathList里面的Element[] dexElements;赋值
-                Object pathList = getPathList(pathLoader);// 一定要重新获取，不要用pathPathList，会报错
+                Object pathList = getPathList(appClassLoader);// 一定要重新获取，不要用pathPathList，会报错
                 setField(pathList, pathList.getClass(), "dexElements", dexElements);
             }
-            pathLoader.loadClass("com.ng.demo.BugTest");
             LogUtils.d("修复完成");
             Toast.makeText(appContext, "修复完成", Toast.LENGTH_SHORT).show();
         } catch (Exception e) {
