@@ -23,9 +23,7 @@ public class DownloadHelper {
     private static final String dexDirPath = "/AAAAA";
 
     public static String getDexDirFilePath(@NonNull Context context) {
-        File dexOutputDir = context.getDir("dex", 0);
-        return dexOutputDir.getAbsolutePath();
-        //return getSDPath(context) +"/Download";
+        return getSDPath(context) +"/AAAAA";
     }
 
     public static void downloadPlug(

@@ -1,4 +1,4 @@
-package com.ng.demo;
+package com.ng.demo.permission;
 
 public interface IPermissionListener {
 

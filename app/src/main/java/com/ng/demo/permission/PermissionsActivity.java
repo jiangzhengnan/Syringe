@@ -1,4 +1,4 @@
-package com.ng.demo;
+package com.ng.demo.permission;
 
 import android.Manifest;
 import android.content.Context;
@@ -14,7 +14,6 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
-import com.ng.demo.permission.RomUtils;
 import com.ng.demo.permission.rom.HuaweiUtils;
 import com.ng.demo.permission.rom.MeizuUtils;
 import com.ng.demo.permission.rom.MiuiUtils;
