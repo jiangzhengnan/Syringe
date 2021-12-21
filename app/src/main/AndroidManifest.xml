@@ -36,6 +36,7 @@
         <!-- 热修复 -->
         <activity android:name="com.ng.demo.test.fix.HotFixActivity"/>
 
+        <activity android:name=".test.proxy.activity.TempActivity"/>
 
 
     </application>

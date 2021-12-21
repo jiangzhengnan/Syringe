@@ -53,11 +53,6 @@ public class FixDexUtil {
         doDexInject(context, loadedDex);
     }
 
-    /**
-     * @author Minuit
-     * @time 2018/6/25 0025 15:51
-     * @desc 验证是否需要热修复
-     */
     public static boolean isGoingToFix(@NonNull Context context) {
         File dexDir = new File(DownloadHelper.getDexDirFilePath(context));
         LogUtils.d("遍历查找dex目录:" + dexDir);

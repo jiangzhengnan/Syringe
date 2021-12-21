@@ -28,13 +28,8 @@ public class HotFixActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
 
-        hotFix();
         init();
-
-    }
-
-    private void hotFix() {
-
+        fakeDownLoadDex();
     }
 
     private void init() {
@@ -59,6 +54,13 @@ public class HotFixActivity extends AppCompatActivity {
     }
 
     //从assets里读取
+    private void fakeDownLoadDex() {
+        DownloadHelper.fakeDownLoadPlug(this, "BugTest.dex");
+        beginHotFix();
+    }
+
+
+    //从网络下载
     private void downLoadDex() {
         LogUtils.d("下载插件: " + remoteDexPath);
         DownloadHelper.downloadPlug(

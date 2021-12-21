@@ -4,6 +4,8 @@ import android.content.Context;
 import android.support.multidex.MultiDex;
 import android.support.multidex.MultiDexApplication;
 
+import com.ng.syringe.Syringe;
+
 /**
  * @author : jiangzhengnan.jzn@alibaba-inc.com
  * @creation : 2021/12/18
@@ -14,6 +16,7 @@ public class MyApplication extends MultiDexApplication {
     protected void attachBaseContext(Context base) {
         super.attachBaseContext(base);
         MultiDex.install(this);
+
     }
 }
 

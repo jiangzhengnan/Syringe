@@ -5,6 +5,7 @@ import android.os.Environment;
 
 import androidx.annotation.NonNull;
 
+import com.ng.syringe.util.FileUtils;
 import com.ng.syringe.util.LogUtils;
 
 import java.io.File;
@@ -23,14 +24,14 @@ public class DownloadHelper {
     private static final String dexDirPath = "/AAAAA";
 
     public static String getDexDirFilePath(@NonNull Context context) {
-        return getSDPath(context) +"/AAAAA";
+        return getSDPath(context) + dexDirPath;
     }
 
     /**
      * 从assets下载插件
      */
-    public static void fakeDownLoadPlug() {
-
+    public static void fakeDownLoadPlug(@NonNull Context context, String assetsName) {
+        FileUtils.copyFileFromAssets(context, assetsName, getDexDirFilePath(context)  + "/" + assetsName);
     }
 
     /**
