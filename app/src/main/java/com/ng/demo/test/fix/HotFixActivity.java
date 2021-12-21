@@ -8,7 +8,6 @@ import android.widget.TextView;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.ng.demo.R;
-import com.ng.demo.test.BugTest;
 import com.ng.syringe.download.DownloadCallBack;
 import com.ng.syringe.download.DownloadHelper;
 import com.ng.syringe.load.FixDexUtil;
@@ -47,7 +46,7 @@ public class HotFixActivity extends AppCompatActivity {
                 String result = "";
                 try {
                     result = new BugTest().getBug(HotFixActivity.this);
-//                    Class bugTestClass = Class.forName("com.ng.demo.test.BugTest");
+//                    Class bugTestClass = Class.forName("com.ng.demo.test.fix.BugTest");
 //                    BugTest instance = (BugTest) bugTestClass.newInstance();
 //                    result = instance.getBug(HomeActivity.this);
                 } catch (Exception e) {

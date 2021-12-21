@@ -26,6 +26,16 @@ public class DownloadHelper {
         return getSDPath(context) +"/AAAAA";
     }
 
+    /**
+     * 从assets下载插件
+     */
+    public static void fakeDownLoadPlug() {
+
+    }
+
+    /**
+     * 联网下载插件
+     */
     public static void downloadPlug(
             @NonNull Context context,
             @NonNull String downloadUrl,
