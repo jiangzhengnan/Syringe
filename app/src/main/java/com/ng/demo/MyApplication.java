@@ -17,6 +17,7 @@ public class MyApplication extends MultiDexApplication {
         super.attachBaseContext(base);
         MultiDex.install(this);
 
+        Syringe.getInstance(this).init();
     }
 }
 

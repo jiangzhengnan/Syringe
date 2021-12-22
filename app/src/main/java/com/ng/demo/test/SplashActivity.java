@@ -14,7 +14,6 @@ import androidx.annotation.Nullable;
 
 import com.ng.demo.R;
 import com.ng.demo.permission.PermissionsActivity;
-import com.ng.demo.test.fix.HotFixActivity;
 import com.ng.demo.test.proxy.activity.TempActivity;
 
 /**

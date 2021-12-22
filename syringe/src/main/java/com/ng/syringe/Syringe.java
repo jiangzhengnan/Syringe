@@ -32,6 +32,10 @@ public class Syringe {
     private Syringe(Context context) {
     }
 
+    public void init() {
+
+    }
+
     private ClassLoader mClassLoader;
 
     private Context mContext;
