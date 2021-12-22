@@ -15,6 +15,7 @@ import androidx.annotation.Nullable;
 import com.ng.demo.R;
 import com.ng.demo.permission.PermissionsActivity;
 import com.ng.demo.test.proxy.activity.TempActivity;
+import com.ng.syringe.Syringe;
 
 /**
  * @author : jiangzhengnan.jzn
@@ -74,6 +75,9 @@ public class SplashActivity extends PermissionsActivity {
     }
 
     private void jumpHome() {
+        Syringe.getInstance(this).init();
+
+
         //startActivity(new Intent(SplashActivity.this, HotFixActivity.class));
         //启动一个受到代理的activity
         startActivity(new Intent(this, TempActivity.class));

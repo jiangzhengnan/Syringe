@@ -7,12 +7,9 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
-
-/**
- * Created by miqt on 2019/2/19.
- */
 //每个代理类都要设置
 public class TextActivityProxy extends ActivityProxy {
+
     public TextActivityProxy(ProxyActivity acty) {
         super(acty);
     }
@@ -21,7 +18,9 @@ public class TextActivityProxy extends ActivityProxy {
     public void onCreate(@Nullable Bundle savedInstanceState) {
         mActy.setContentView($("R.layout.activity_hello"));
         TextView textView = mActy.findViewById($("R.id.tv_text"));
-        textView.setText("没有代理,只能自己干活了..");
+        textView.setText("代理没有加载");
+        //textView.setText("代理加载成功");
+
     }
 
     @Override

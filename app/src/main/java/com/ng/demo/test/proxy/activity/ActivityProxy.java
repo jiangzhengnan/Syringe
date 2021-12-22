@@ -44,9 +44,7 @@ public abstract class ActivityProxy {
 
 
     public void onStart() {
-    }
-
-    ;
+    };
 
     public void onResume() {
     }

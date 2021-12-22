@@ -22,7 +22,6 @@ public class ProxyActivity extends Activity {
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         proxy = ObjectFactory.make(TextActivityProxy.class.getName(),this);
-
         if (proxy != null) {
             proxy.onCreate(savedInstanceState);
         }

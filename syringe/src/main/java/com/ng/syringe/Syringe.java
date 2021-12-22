@@ -2,6 +2,10 @@ package com.ng.syringe;
 
 import android.content.Context;
 
+import com.ng.syringe.download.DownloadHelper;
+import com.ng.syringe.load.FixDexUtil;
+import com.ng.syringe.util.LogUtils;
+
 /**
  * @author : jiangzhengnan.jzn@alibaba-inc.com
  * @creation : 2021/12/18
@@ -30,10 +34,17 @@ public class Syringe {
     }
 
     private Syringe(Context context) {
+        this.mContext = context;
     }
 
     public void init() {
-
+        DownloadHelper.fakeDownLoadPlug(mContext, "TextActivityProxy.dex");
+        if (FixDexUtil.isGoingToFix(mContext)) {
+            LogUtils.d("需要热修复 dexPath");
+            FixDexUtil.loadFixedDex(mContext);
+        } else {
+            LogUtils.d("不需要热修复");
+        }
     }
 
     private ClassLoader mClassLoader;
