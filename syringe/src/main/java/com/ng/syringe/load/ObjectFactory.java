@@ -1,4 +1,4 @@
-package com.ng.demo.test.proxy.activity;
+package com.ng.syringe.load;
 
 
 import com.ng.syringe.Syringe;
@@ -59,6 +59,9 @@ public class ObjectFactory {
         return null;
     }
 
+    public static <T> T make(Class<T> clazz, Object... pram) {
+        return make(clazz.getName(), pram);
+    }
 
     public static <T> T make(String classname, Object... pram) {
         if (classname == null || classname.length() == 0) {

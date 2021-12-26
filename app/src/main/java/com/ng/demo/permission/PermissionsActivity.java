@@ -1,6 +1,7 @@
 package com.ng.demo.permission;
 
 import android.Manifest;
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -10,7 +11,6 @@ import android.provider.Settings;
 import android.util.Log;
 
 import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
@@ -25,7 +25,7 @@ import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.List;
 
-public class PermissionsActivity extends AppCompatActivity implements IPermissionListener {
+public class PermissionsActivity extends Activity implements IPermissionListener {
 
     private static final String TAG = "PermissionsActivity";
 

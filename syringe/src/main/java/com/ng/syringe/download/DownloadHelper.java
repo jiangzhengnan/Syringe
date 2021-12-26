@@ -10,6 +10,7 @@ import com.ng.syringe.util.LogUtils;
 
 import java.io.File;
 import java.io.FileOutputStream;
+import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.URL;
@@ -30,8 +31,20 @@ public class DownloadHelper {
     /**
      * 从assets下载插件
      */
-    public static void fakeDownLoadPlug(@NonNull Context context, String assetsName) {
-        FileUtils.copyFileFromAssets(context, assetsName, getDexDirFilePath(context)  + "/" + assetsName);
+    public static void fakeDownLoadPlug(@NonNull Context context) {
+        try {
+            String[] fileNames = context.getAssets().list("");
+            for (String tmpName : fileNames) {
+                if (tmpName.endsWith(".dex") || tmpName.endsWith(".apk")) {
+                    String dstPath = getDexDirFilePath(context) + "/" + tmpName;
+                    LogUtils.d("模拟下载插件:" + tmpName + " 至:" + dstPath);
+                    FileUtils.copyFileFromAssets(context, tmpName, dstPath);
+                }
+            }
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     /**
@@ -108,5 +121,46 @@ public class DownloadHelper {
             sdDir = Environment.getRootDirectory();// 获取跟目录
         }
         return sdDir.toString();
+    }
+
+    //从网络下载
+    private void downLoadDex(Context context) {
+        String remoteDexPath = "https://qfile.okntc.com/BugTest.dex";
+        LogUtils.d("下载插件: " + remoteDexPath);
+        DownloadHelper.downloadPlug(
+                context,
+                remoteDexPath,
+                "BugTest.dex",
+                new DownloadCallBack() {
+                    @Override
+                    public void onStart() {
+                        LogUtils.d("下载开始");
+                    }
+
+                    @Override
+                    public void onCanceled() {
+
+                    }
+
+                    @Override
+                    public void onCanceling() {
+
+                    }
+
+                    @Override
+                    public void onProgress(long progress) {
+                        LogUtils.d("下载中 " + progress);
+                    }
+
+                    @Override
+                    public void onCompleted(String filePath) {
+                        LogUtils.d("下载完成");
+                    }
+
+                    @Override
+                    public void onError(int errorCode, String errorMsg) {
+                        LogUtils.d("下载错误 " + errorCode + " " + errorMsg);
+                    }
+                });
     }
 }

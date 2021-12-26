@@ -14,7 +14,7 @@ import androidx.annotation.Nullable;
 
 import com.ng.demo.R;
 import com.ng.demo.permission.PermissionsActivity;
-import com.ng.demo.test.proxy.activity.TempActivity;
+import com.ng.demo.test.proxy.TestHotFixProxyActivity;
 import com.ng.syringe.Syringe;
 
 /**
@@ -22,13 +22,13 @@ import com.ng.syringe.Syringe;
  * @creation : 2021/12/15
  * @description :
  */
-public class SplashActivity extends PermissionsActivity {
+public class MainActivity extends PermissionsActivity {
     private static final int requestFullFilePermissionCode = 1;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_welcome);
+        setContentView(R.layout.activity_main);
         requestRuntimePermission(
                 Manifest.permission.WRITE_EXTERNAL_STORAGE,
                 Manifest.permission.READ_EXTERNAL_STORAGE,
@@ -51,6 +51,7 @@ public class SplashActivity extends PermissionsActivity {
                 @Override
                 public void run() {
                     jumpHome();
+                    finish();
                 }
             });
         } else {
@@ -77,10 +78,11 @@ public class SplashActivity extends PermissionsActivity {
     private void jumpHome() {
         Syringe.getInstance(this).init();
 
+        //热修复 普通类
+        //startActivity(new Intent(MainActivity.this, TestHotFixBugActivity.class));
 
-        //startActivity(new Intent(SplashActivity.this, HotFixActivity.class));
-        //启动一个受到代理的activity
-        startActivity(new Intent(this, TempActivity.class));
-        finish();
+        //热修复 Activity  (通过代理实现，开发有感知)
+        startActivity(new Intent(this, TestHotFixProxyActivity.class));
+
     }
 }

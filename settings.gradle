@@ -1,3 +1,4 @@
 rootProject.name = "Syringe"
 include ':app'
 include ':syringe'
+include ':game'

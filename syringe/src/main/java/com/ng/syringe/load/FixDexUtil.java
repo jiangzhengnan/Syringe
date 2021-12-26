@@ -55,17 +55,17 @@ public class FixDexUtil {
 
     public static boolean isGoingToFix(@NonNull Context context) {
         File dexDir = new File(DownloadHelper.getDexDirFilePath(context));
-        LogUtils.d("遍历查找dex目录:" + dexDir);
+        LogUtils.d("[加载插件] 遍历查找dex暂存目录:" + dexDir);
         if (!dexDir.exists()) {
-            LogUtils.d("遍历查找dex目录为空" + dexDir);
+            LogUtils.d("[加载插件] 遍历查找dex目录为空" + dexDir);
             return false;
         }
+        boolean result = false;
         // 遍历所有的修复dex , 因为可能是多个dex修复包
         File[] listFiles = dexDir.listFiles();
         if (listFiles != null) {
-            LogUtils.d("遍历查找dex 文件数量:" + listFiles.length);
+            LogUtils.d("[加载插件] 遍历查找dex 文件数量:" + listFiles.length);
             for (File file : listFiles) {
-                LogUtils.d("遍历dex目录:" + file.getAbsolutePath() + " " + file.getName());
                 if (file.getName().endsWith(DEX_SUFFIX)
                         || file.getName().endsWith(APK_SUFFIX)
                         || file.getName().endsWith(JAR_SUFFIX)
@@ -73,13 +73,15 @@ public class FixDexUtil {
 
                     loadedDex.add(file);// 存入集合
                     //有目标dex文件, 需要修复
-                    LogUtils.d("有目标dex文件, 需要修复:" + file.getAbsolutePath() + " " + file.getName());
-                    return true;
+                    LogUtils.d("[加载插件] 有目标dex文件, 需要修复:" + file.getAbsolutePath() + " " + file.getName());
+                    result = true;
                 }
             }
         }
-        LogUtils.d("遍历查找dex目录,没有dex文件");
-        return false;
+        if (!result) {
+            LogUtils.d("[加载插件] 未找到dex文件，不执行修复");
+        }
+        return result;
     }
 
     private static void doDexInject(Context appContext, HashSet<File> loadedDex) {
@@ -94,7 +96,7 @@ public class FixDexUtil {
                 // 2.加载指定的修复的dex文件的Loader
                 DexClassLoader dexLoader = new DexClassLoader(
                         dex.getAbsolutePath(),// 修复好的dex（补丁）所在目录
-                        null,// 存放dex的解压目录（用于jar、zip、apk格式的补丁）
+                        dexDir.getAbsolutePath(),// 存放dex的解压目录（用于jar、zip、apk格式的补丁）
                         null,// 加载dex时需要的库
                         appClassLoader// 父类加载器
                 );
@@ -119,12 +121,14 @@ public class FixDexUtil {
                 // 重写给PathList里面的Element[] dexElements;赋值
                 Object pathList = getPathList(appClassLoader);// 一定要重新获取，不要用pathPathList，会报错
                 setField(pathList, pathList.getClass(), "dexElements", dexElements);
+
+
             }
-            LogUtils.d("修复完成");
+            LogUtils.d("[加载插件] 修复完成:" + loadedDex.toString());
             Toast.makeText(appContext, "修复完成", Toast.LENGTH_SHORT).show();
         } catch (Exception e) {
             e.printStackTrace();
-            LogUtils.d("修复异常:" + e.getMessage());
+            LogUtils.d("[加载插件] 修复异常:" + e.getMessage());
         }
     }
 

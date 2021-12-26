@@ -1,4 +1,4 @@
-package com.ng.demo.test.proxy.activity;
+package com.ng.syringe.load;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -7,11 +7,11 @@ import android.view.KeyEvent;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
-public abstract class ActivityProxy {
+public abstract class ActivityProxyAbs {
 
     public ProxyActivity mActy;
 
-    public ActivityProxy(ProxyActivity acty) {
+    public ActivityProxyAbs(ProxyActivity acty) {
         mActy = acty;
     }
 
@@ -38,43 +38,32 @@ public abstract class ActivityProxy {
      *
      * @param id 填“R.id.idname”格式一定要正确，最好是先用android的findviewbyid然后再加上双引号就好了
      */
-    public int $(String id) {
-        return R2.id_(id);
+    public int getSplitResId(String id) {
+        int result = SplitResUtils.getId(id, mActy.getResources(), mActy.mPackageName);
+        return result;
     }
 
 
     public void onStart() {
-    };
+    }
 
     public void onResume() {
     }
 
-    ;
-
     public void onRestart() {
     }
-
-    ;
 
     public void onPause() {
     }
 
-    ;
-
     public void onStop() {
     }
-
-    ;
 
     public void onDestroy() {
     }
 
-    ;
-
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
     }
-
-    ;
 
     public void onBackPressed() {
     }
@@ -82,8 +71,6 @@ public abstract class ActivityProxy {
 
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
     }
-
-    ;
 
     public boolean onKeyDown(int keyCode, KeyEvent event) {
         return false;

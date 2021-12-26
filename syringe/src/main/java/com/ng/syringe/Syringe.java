@@ -4,7 +4,6 @@ import android.content.Context;
 
 import com.ng.syringe.download.DownloadHelper;
 import com.ng.syringe.load.FixDexUtil;
-import com.ng.syringe.util.LogUtils;
 
 /**
  * @author : jiangzhengnan.jzn@alibaba-inc.com
@@ -38,12 +37,9 @@ public class Syringe {
     }
 
     public void init() {
-        DownloadHelper.fakeDownLoadPlug(mContext, "TextActivityProxy.dex");
+        DownloadHelper.fakeDownLoadPlug(mContext);
         if (FixDexUtil.isGoingToFix(mContext)) {
-            LogUtils.d("需要热修复 dexPath");
             FixDexUtil.loadFixedDex(mContext);
-        } else {
-            LogUtils.d("不需要热修复");
         }
     }
 
