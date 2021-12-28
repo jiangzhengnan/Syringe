@@ -6,7 +6,7 @@ import android.view.View;
 
 import androidx.annotation.Nullable;
 
-import com.ng.syringe.load.ActivityProxyAbs;
+import com.ng.syringe.load.base.ActivityProxyAbs;
 import com.ng.syringe.load.GameStubActivity;
 import com.ng.syringe.load.ProxyActivity;
 
@@ -33,8 +33,6 @@ public class NgGameLevelOneActivity extends ActivityProxyAbs {
     }
 
     private void jumpNext() {
-        //mActy.startActivity(new Intent(mActy, NgGameLevelTwoActivity.class));
-
         Intent i = new Intent(mActy, GameStubActivity.class);
         i.putExtra(GameStubActivity.INTENT_CLASS_NAME,"com.ng.game.NgGameLevelTwoActivity");
         i.putExtra(GameStubActivity.INTENT_RES_PATH,"/storage/emulated/0/AAAAA/game-debug.apk");

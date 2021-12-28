@@ -33,15 +33,14 @@
             </intent-filter>
         </activity>
 
-        <!-- 热修复 -->
+        <!-- 热修复 普通类-->
         <activity android:name="com.ng.demo.test.fix.TestHotFixBugActivity" />
 
-        <!-- 动态加载 (代理方式)-->
-        <activity android:name=".test.proxy.TestHotFixProxyActivity" />
+        <!-- 动态加载 各种组件 (通过代理方式,需要加载game-debug.apk)-->
+        <activity android:name=".test.proxy.TestHotLoadProxyActivity" />
 
-        <!-- 动态加载 占坑aty -->
+        <!-- 动态加载 aty 需要的占坑aty -->
         <activity android:name="com.ng.syringe.load.GameStubActivity" />
-
 
     </application>
 

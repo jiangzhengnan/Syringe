@@ -4,7 +4,7 @@ import android.os.Bundle;
 
 import androidx.annotation.Nullable;
 
-import com.ng.syringe.load.ActivityProxyAbs;
+import com.ng.syringe.load.base.ActivityProxyAbs;
 import com.ng.syringe.load.ProxyActivity;
 
 /**

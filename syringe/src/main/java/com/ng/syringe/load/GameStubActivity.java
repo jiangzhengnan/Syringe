@@ -21,16 +21,4 @@ public class GameStubActivity extends ProxyActivity {
         super.onCreate(savedInstanceState);
     }
 
-//    @Override
-//    protected String targetActivityClassName() {
-//        //LogUtils.d("实际的加载类:" + NgGameLevelOneActivity.class.getName());
-//        //return NgGameLevelOneActivity.class.getName();
-//        return "com.ng.game.NgGameLevelOneActivity";
-//    }
-//
-//    @Override
-//    protected String targetResPath() {
-//        return "/storage/emulated/0/AAAAA/game-debug.apk";
-//    }
-
 }

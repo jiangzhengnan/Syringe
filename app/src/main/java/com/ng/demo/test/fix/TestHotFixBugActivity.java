@@ -35,7 +35,7 @@ public class TestHotFixBugActivity extends Activity {
             }
         });
 
-        //setTitle("测试修复普通类");
+        setTitle("测试修复普通类");
     }
 
     private void startTest() {

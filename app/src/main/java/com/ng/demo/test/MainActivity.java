@@ -14,7 +14,7 @@ import androidx.annotation.Nullable;
 
 import com.ng.demo.R;
 import com.ng.demo.permission.PermissionsActivity;
-import com.ng.demo.test.proxy.TestHotFixProxyActivity;
+import com.ng.demo.test.proxy.TestHotLoadProxyActivity;
 import com.ng.syringe.Syringe;
 
 /**
@@ -82,7 +82,7 @@ public class MainActivity extends PermissionsActivity {
         //startActivity(new Intent(MainActivity.this, TestHotFixBugActivity.class));
 
         //热修复 Activity  (通过代理实现，开发有感知)
-        startActivity(new Intent(this, TestHotFixProxyActivity.class));
+        startActivity(new Intent(this, TestHotLoadProxyActivity.class));
 
     }
 }

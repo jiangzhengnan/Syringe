@@ -3,35 +3,30 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="20dp"
-        android:text="动态加载-代理方式"
-        android:textColor="#000"
-        android:textSize="20dp"
-        android:textStyle="bold" />
-
-
     <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerInParent="true"
+        android:gravity="center_horizontal"
         android:orientation="vertical">
 
         <Button
             android:id="@+id/btn_1"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="动态Activity" />
+            android:text="加载Activity" />
 
         <Button
             android:id="@+id/btn_2"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="--" />
+            android:text="加载动态广播" />
+
+        <Button
+            android:id="@+id/btn_3"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="加载静态广播" />
 
     </LinearLayout>
 

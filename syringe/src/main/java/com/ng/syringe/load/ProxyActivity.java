@@ -1,7 +1,9 @@
 package com.ng.syringe.load;
 
 import android.app.Activity;
+import android.content.BroadcastReceiver;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
@@ -14,12 +16,14 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 import com.ng.syringe.R;
+import com.ng.syringe.load.base.ActivityProxyAbs;
+import com.ng.syringe.load.base.ProxyReceive;
 import com.ng.syringe.util.LogUtils;
 
 
 /**
  * 被代理器完全支配的activity
- *
+ * 在onCreate中生成真正的代理
  * @see ActivityProxyAbs
  */
 
@@ -28,7 +32,7 @@ public abstract class ProxyActivity extends Activity {
     protected AssetManager mAssetManager;
     protected Resources mResources;
     protected Resources.Theme mTheme;
-    protected String mPackageName;
+    public String mPackageName;
 
     protected String mTargetActivityClassName;
     protected String mTargetResPath;
@@ -83,9 +87,6 @@ public abstract class ProxyActivity extends Activity {
         } catch (Exception e) {
             e.printStackTrace();
         }
-
-        int result = SplitResUtils.getId("R.layout.activity_game_one", mResources, mPackageName);
-        LogUtils.d("尝试从" + mPackageName + "找结果:" + result);
     }
 
     @Override
@@ -205,5 +206,15 @@ public abstract class ProxyActivity extends Activity {
         if (proxy != null) {
             proxy.onRequestPermissionsResult(requestCode, permissions, grantResults);
         }
+    }
+
+    @Override
+    public Intent registerReceiver(BroadcastReceiver receiver, IntentFilter filter) {
+        //收到调用注册动态广播的申请，那么我就帮你完成
+        IntentFilter newIntentFilter = new IntentFilter();
+        for (int i = 0; i < filter.countActions(); i++) {
+            newIntentFilter.addAction(filter.getAction(i));
+        }
+        return super.registerReceiver(new ProxyReceive(receiver.getClass().getName(),this), newIntentFilter);
     }
 }
