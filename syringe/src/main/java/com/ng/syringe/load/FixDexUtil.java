@@ -1,7 +1,12 @@
 package com.ng.syringe.load;
 
 
-import android.content.Context;
+import android.annotation.SuppressLint;
+import android.app.Activity;
+import android.content.BroadcastReceiver;
+import android.content.IntentFilter;
+import android.content.pm.ActivityInfo;
+import android.content.pm.PackageManager;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -12,7 +17,9 @@ import com.ng.syringe.util.LogUtils;
 import java.io.File;
 import java.lang.reflect.Array;
 import java.lang.reflect.Field;
+import java.lang.reflect.Method;
 import java.util.HashSet;
+import java.util.List;
 
 import dalvik.system.DexClassLoader;
 import dalvik.system.PathClassLoader;
@@ -38,23 +45,21 @@ public class FixDexUtil {
 
     /**
      * 加载补丁，使用默认目录：data/data/包名/files/odex
-     *
-     * @param context
      */
-    public static void loadFixedDex(Context context) {
-        loadFixedDex(context, null);
+    public static void loadFixedDex(Activity activity) {
+        loadFixedDex(activity, null);
     }
 
     /**
      * 加载补丁
      */
-    public static void loadFixedDex(Context context, String filePath) {
+    public static void loadFixedDex(Activity activity, String filePath) {
         // dex合并之前的dex
-        doDexInject(context, loadedDex);
+        doDexInject(activity, loadedDex);
     }
 
-    public static boolean isGoingToFix(@NonNull Context context) {
-        File dexDir = new File(DownloadHelper.getDexDirFilePath(context));
+    public static boolean isGoingToFix(@NonNull Activity activity) {
+        File dexDir = new File(DownloadHelper.getDexDirFilePath(activity));
         LogUtils.d("[加载插件] 遍历查找dex暂存目录:" + dexDir);
         if (!dexDir.exists()) {
             LogUtils.d("[加载插件] 遍历查找dex目录为空" + dexDir);
@@ -74,6 +79,7 @@ public class FixDexUtil {
                     loadedDex.add(file);// 存入集合
                     //有目标dex文件, 需要修复
                     LogUtils.d("[加载插件] 有目标dex文件, 需要修复:" + file.getAbsolutePath() + " " + file.getName());
+
                     result = true;
                 }
             }
@@ -84,14 +90,77 @@ public class FixDexUtil {
         return result;
     }
 
-    private static void doDexInject(Context appContext, HashSet<File> loadedDex) {
-        File dexDir = new File(DownloadHelper.getDexDirFilePath(appContext));
+
+    /**
+     * 通过解析清单文件来 拿到静态广播并且进行注册
+     */
+    @SuppressLint({"PrivateApi","DiscouragedPrivateApi"})
+    private static void parseReceivers(Activity activity, String path) {
+        try {
+            ClassLoader classLoader = activity.getClassLoader();
+            //我们知道解析一个apk文件的入口就是PackageParse.parsePackage 这个方法
+            //所以我们使用反射 来调用这个方法 最终得到了一个 PackageParse$Package 这个类
+            Class<?> mPackageParseClass = Class.forName("android.content.pm.PackageParser");
+            Method mParsePackageMethod = mPackageParseClass.getDeclaredMethod("parsePackage", File.class, int.class);
+            Object mPackageParseObj = mPackageParseClass.newInstance();
+            Object mPackageObj = mParsePackageMethod.invoke(mPackageParseObj, new File(path), PackageManager.GET_ACTIVITIES);
+            if (mPackageObj == null) {
+                return;
+            }
+            //解析出来的receiver就存在PackageParse$Package 这个类里面的一个receivers集合里面
+            Field mReceiversListField = mPackageObj.getClass().getDeclaredField("receivers");
+            //然后得到反射得到这个属性的值 最终得到一个集合
+            List mReceiverList = (List) mReceiversListField.get(mPackageObj);
+
+            //接下来我们要拿到 IntentFilter 和name属性 这样才能反射创建对象，动态在宿主里面注册广播
+            Class<?> mComponetClass = Class.forName("android.content.pm.PackageParser$Component");
+            Field mIntentFields = mComponetClass.getDeclaredField("intents");
+
+            //这两行是为了调用generateActivityInfo 而反射拿到的参数
+            Class<?> mPackageParse$ActivityClass = Class.forName("android.content.pm.PackageParser$Activity");
+            Class<?> mPackageUserStateClass = Class.forName("android.content.pm.PackageUserState");
+
+            Object mPackzgeUserStateObj = mPackageUserStateClass.newInstance();
+
+            // 拿到generateActivityInfo这个方法
+            Method mGeneReceiverInfo = mPackageParseClass.getMethod("generateActivityInfo", mPackageParse$ActivityClass, int.class, mPackageUserStateClass, int.class);
+
+            Class<?> mUserHandlerClass = Class.forName("android.os.UserHandle");
+            Method getCallingUserIdMethod = mUserHandlerClass.getDeclaredMethod("getCallingUserId");
+
+            int userId = (int) getCallingUserIdMethod.invoke(null);
+
+            //然后for循环 去拿到name和 intentFilter
+            for (Object activityObj : mReceiverList) {
+                //调用generateActivityInfo
+                // 这个是我们要调用的方法的形参 public static final ActivityInfo generateActivityInfo(Activity a, int flags,PackageUserState state, int userId);
+                //得到一个ActivityInfo
+                ActivityInfo info = (ActivityInfo) mGeneReceiverInfo.invoke(mPackageParseObj, activityObj, 0, mPackzgeUserStateObj, userId);
+                //拿到这个name 相当于我们在清单文件中Android:name 这样，是一个全类名，然后通过反射去创建对象
+                BroadcastReceiver broadcastReceiver = (BroadcastReceiver) classLoader.loadClass(info.name).newInstance();
+
+                //在拿到IntentFilter
+                List<? extends IntentFilter> intents = (List<? extends IntentFilter>) mIntentFields.get(activityObj);
+                //然后直接调用registerReceiver方法发
+                for (IntentFilter intentFilter : intents) {
+                    LogUtils.d("[加载插件] 注册静态广播成功:" + intentFilter.toString());
+                    activity.registerReceiver(broadcastReceiver, intentFilter);
+                }
+            }
+        } catch (Exception e) {
+            LogUtils.d("[加载插件] 注册静态广播失败:" + e.getMessage());
+            e.printStackTrace();
+        }
+    }
+
+    private static void doDexInject(Activity activity, HashSet<File> loadedDex) {
+        File dexDir = new File(DownloadHelper.getDexDirFilePath(activity));
         if (!dexDir.exists()) {
             dexDir.mkdirs();
         }
         try {
             // 1.加载应用程序dex的Loader
-            PathClassLoader appClassLoader = (PathClassLoader) appContext.getClassLoader();
+            PathClassLoader appClassLoader = (PathClassLoader) activity.getClassLoader();
             for (File dex : loadedDex) {
                 // 2.加载指定的修复的dex文件的Loader
                 DexClassLoader dexLoader = new DexClassLoader(
@@ -123,9 +192,16 @@ public class FixDexUtil {
                 setField(pathList, pathList.getClass(), "dexElements", dexElements);
 
 
+
+                //注册静态广播
+                if (dex.getName().endsWith(APK_SUFFIX)) {
+                    LogUtils.d("[加载插件] 准备注册静态广播:" + dex.getAbsolutePath());
+                    parseReceivers(activity, dex.getAbsolutePath());
+                }
+
             }
             LogUtils.d("[加载插件] 修复完成:" + loadedDex.toString());
-            Toast.makeText(appContext, "修复完成", Toast.LENGTH_SHORT).show();
+            Toast.makeText(activity, "修复完成", Toast.LENGTH_SHORT).show();
         } catch (Exception e) {
             e.printStackTrace();
             LogUtils.d("[加载插件] 修复异常:" + e.getMessage());

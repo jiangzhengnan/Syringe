@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 
 import com.ng.syringe.load.base.BroadCastProxyInterface;
+import com.ng.syringe.util.LogUtils;
 import com.ng.syringe.util.UIUtils;
 
 /**
@@ -18,10 +19,12 @@ public class NgDynamicBroadcastReceiver extends BroadcastReceiver implements Bro
     @Override
     public void attach(Context context) {
         UIUtils.showToast(context, "broadcast bind success in " + context.getPackageName());
+        LogUtils.d("broadcast bind success in " + context.getPackageName());
     }
 
     @Override
     public void onReceive(Context context, Intent intent) {
         UIUtils.showToast(context, "on receive broadcast");
+        LogUtils.d("on receive broadcast");
     }
 }

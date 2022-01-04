@@ -4,8 +4,12 @@
 
     <application android:theme="@style/Theme.AppCompat">
 
-        <activity android:name=".NgGameLevelTwoActivity"/>
 
+        <receiver android:name=".broad.NgStaticReceiver" android:exported="true">
+            <intent-filter>
+                <action android:name="com.ng.game.staticReceive" />
+            </intent-filter>
+        </receiver>
     </application>
 
 </manifest>

@@ -215,6 +215,7 @@ public abstract class ProxyActivity extends Activity {
         for (int i = 0; i < filter.countActions(); i++) {
             newIntentFilter.addAction(filter.getAction(i));
         }
+        LogUtils.d("通过代理方法注册广播");
         return super.registerReceiver(new ProxyReceive(receiver.getClass().getName(),this), newIntentFilter);
     }
 }

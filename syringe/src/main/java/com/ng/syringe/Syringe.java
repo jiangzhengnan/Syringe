@@ -1,6 +1,6 @@
 package com.ng.syringe;
 
-import android.content.Context;
+import android.app.Activity;
 
 import com.ng.syringe.download.DownloadHelper;
 import com.ng.syringe.load.FixDexUtil;
@@ -14,11 +14,11 @@ public class Syringe {
 
     private static volatile Syringe instance = null;
 
-    public static Syringe getInstance(Context context) {
+    public static Syringe getInstance(Activity activity) {
         if (instance == null) {
             synchronized (Syringe.class) {
                 if (instance == null) {
-                    instance = new Syringe(context);
+                    instance = new Syringe(activity);
                 }
             }
         }
@@ -32,24 +32,20 @@ public class Syringe {
         return instance;
     }
 
-    private Syringe(Context context) {
-        this.mContext = context;
+    private Syringe(Activity activity) {
+        this.mActivity = activity;
     }
 
     public void init() {
-        DownloadHelper.fakeDownLoadPlug(mContext);
-        if (FixDexUtil.isGoingToFix(mContext)) {
-            FixDexUtil.loadFixedDex(mContext);
+        DownloadHelper.fakeDownLoadPlug(mActivity);
+        if (FixDexUtil.isGoingToFix(mActivity)) {
+            FixDexUtil.loadFixedDex(mActivity);
         }
     }
 
     private ClassLoader mClassLoader;
 
-    private Context mContext;
-
-    public Context getContext() {
-        return mContext;
-    }
+    private Activity mActivity;
 
     /**
      * 热加载文件
@@ -61,7 +57,7 @@ public class Syringe {
 
     public Class<?> loadClass(String classname) throws ClassNotFoundException {
         if (mClassLoader == null) {
-            return mContext.getClassLoader().loadClass(classname);
+            return mActivity.getClassLoader().loadClass(classname);
         }
         return mClassLoader.loadClass(classname);
     }
