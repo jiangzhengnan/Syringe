@@ -10,7 +10,7 @@ import androidx.annotation.Nullable;
 
 import com.ng.demo.R;
 import com.ng.syringe.Syringe;
-import com.ng.syringe.load.GameStubActivity;
+import com.ng.syringe.load.ProxyStubActivity;
 import com.ng.syringe.util.LogUtils;
 
 /**
@@ -45,7 +45,7 @@ public class TestHotLoadProxyActivity extends Activity implements View.OnClickLi
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_test_hot_fix_aty);
+        setContentView(R.layout.activity_test_hot_load_proxy_aty);
         Syringe.getInstance(this).init();
 
         findViewById(R.id.btn_1).setOnClickListener(this);
@@ -57,16 +57,16 @@ public class TestHotLoadProxyActivity extends Activity implements View.OnClickLi
     @SuppressLint("NonConstantResourceId")
     @Override
     public void onClick(View v) {
-        Intent i = new Intent(this, GameStubActivity.class);
+        Intent i = new Intent(this, ProxyStubActivity.class);
         switch (v.getId()) {
             case R.id.btn_1:
-                i.putExtra(GameStubActivity.INTENT_CLASS_NAME, "com.ng.game.NgGameLevelOneActivity");
-                i.putExtra(GameStubActivity.INTENT_RES_PATH, "/storage/emulated/0/AAAAA/game-debug.apk");
+                i.putExtra(ProxyStubActivity.INTENT_CLASS_NAME, "com.ng.game.NgGameLevelOneActivity");
+                i.putExtra(ProxyStubActivity.INTENT_RES_PATH, "/storage/emulated/0/AAAAA/game-debug.apk");
                 startActivity(i);
                 break;
             case R.id.btn_2:
-                i.putExtra(GameStubActivity.INTENT_CLASS_NAME, "com.ng.game.broad.NgGameBroadcastActivity");
-                i.putExtra(GameStubActivity.INTENT_RES_PATH, "/storage/emulated/0/AAAAA/game-debug.apk");
+                i.putExtra(ProxyStubActivity.INTENT_CLASS_NAME, "com.ng.game.broad.NgGameBroadcastActivity");
+                i.putExtra(ProxyStubActivity.INTENT_RES_PATH, "/storage/emulated/0/AAAAA/game-debug.apk");
                 startActivity(i);
                 break;
             case R.id.btn_3:

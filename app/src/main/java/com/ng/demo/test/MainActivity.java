@@ -8,12 +8,17 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.Settings;
+import android.view.View;
+import android.widget.Button;
+import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 
 import com.ng.demo.R;
 import com.ng.demo.permission.PermissionsActivity;
+import com.ng.demo.test.fix.TestHotFixBugActivity;
+import com.ng.demo.test.hook.TestHotLoadHookActivity;
 import com.ng.demo.test.proxy.TestHotLoadProxyActivity;
 
 /**
@@ -23,11 +28,13 @@ import com.ng.demo.test.proxy.TestHotLoadProxyActivity;
  */
 public class MainActivity extends PermissionsActivity {
     private static final int requestFullFilePermissionCode = 1;
+    private LinearLayout mContainerLayout;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        mContainerLayout = findViewById(R.id.ll_container);
         requestRuntimePermission(
                 Manifest.permission.WRITE_EXTERNAL_STORAGE,
                 Manifest.permission.READ_EXTERNAL_STORAGE,
@@ -49,8 +56,9 @@ public class MainActivity extends PermissionsActivity {
             runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
-                    jumpHome();
-                    finish();
+                    initView();
+
+                    //startActivity(new Intent(MainActivity.this, TestHotLoadHookActivity.class));
                 }
             });
         } else {
@@ -66,6 +74,26 @@ public class MainActivity extends PermissionsActivity {
         }
     }
 
+    private void initView() {
+        addFunction("热修复普通类", TestHotFixBugActivity.class);
+        addFunction("热加载组件 (通过代理实现，开发有感知)", TestHotLoadProxyActivity.class);
+        addFunction("热加载组件 (通过Hook实现，开发无感知)", TestHotLoadHookActivity.class);
+
+    }
+
+    private void addFunction(String showStr, Class targetClass) {
+        Button btn = new Button(this);
+        btn.setText(showStr);
+        btn.setTextSize(12);
+        btn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(MainActivity.this, targetClass));
+            }
+        });
+        mContainerLayout.addView(btn);
+    }
+
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -74,13 +102,4 @@ public class MainActivity extends PermissionsActivity {
         }
     }
 
-    private void jumpHome() {
-
-        //热修复 普通类
-        //startActivity(new Intent(MainActivity.this, TestHotFixBugActivity.class));
-
-        //热修复 Activity  (通过代理实现，开发有感知)
-        startActivity(new Intent(this, TestHotLoadProxyActivity.class));
-
-    }
 }

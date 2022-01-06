@@ -40,7 +40,4 @@ dependencies {
     implementation 'com.android.support:multidex:1.0.3'
     implementation project(path: ':syringe')
 
-    //implementation project(path: ':game')
-
-
 }

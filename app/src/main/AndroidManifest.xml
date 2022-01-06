@@ -21,6 +21,7 @@
         android:requestLegacyExternalStorage="true"
         android:supportsRtl="true">
 
+        <!-- 入口，权限获取 -->
         <activity
             android:name="com.ng.demo.test.MainActivity"
             android:exported="true"
@@ -36,11 +37,11 @@
         <!-- 热修复 普通类-->
         <activity android:name="com.ng.demo.test.fix.TestHotFixBugActivity" />
 
-        <!-- 动态加载 各种组件 (通过代理方式,需要加载game-debug.apk)-->
+        <!-- 动态加载 各种组件 (通过代理方式,开发有感知,需要加载game-debug.apk) -->
         <activity android:name=".test.proxy.TestHotLoadProxyActivity" />
 
-        <!-- 动态加载 aty 需要的占坑aty -->
-        <activity android:name="com.ng.syringe.load.GameStubActivity" />
+        <!-- 动态加载 各种组件 (通过hook方式,开发无感知,需要加载game-debug.apk) -->
+        <activity android:name=".test.hook.TestHotLoadHookActivity" />
 
     </application>
 

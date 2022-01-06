@@ -2,4 +2,10 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.ng.syringe">
 
+    <application >
+
+        <!-- 动态加载 aty 需要的占坑aty -->
+        <activity android:name="com.ng.syringe.load.ProxyStubActivity" />
+
+    </application>
 </manifest>

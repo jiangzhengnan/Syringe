@@ -7,12 +7,11 @@ import androidx.annotation.Nullable;
 /**
  * 占位代理Activity
  */
-public class GameStubActivity extends ProxyActivity {
+public class ProxyStubActivity extends ProxyActivity {
 
     public static final String INTENT_CLASS_NAME = "INTENT_CLASS_NAME";
 
     public static final String INTENT_RES_PATH = "INTENT_CLASS_PATH";
-
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
