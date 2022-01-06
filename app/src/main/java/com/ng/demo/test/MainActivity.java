@@ -15,7 +15,6 @@ import androidx.annotation.Nullable;
 import com.ng.demo.R;
 import com.ng.demo.permission.PermissionsActivity;
 import com.ng.demo.test.proxy.TestHotLoadProxyActivity;
-import com.ng.syringe.Syringe;
 
 /**
  * @author : jiangzhengnan.jzn
@@ -76,7 +75,6 @@ public class MainActivity extends PermissionsActivity {
     }
 
     private void jumpHome() {
-        Syringe.getInstance(this).init();
 
         //热修复 普通类
         //startActivity(new Intent(MainActivity.this, TestHotFixBugActivity.class));

@@ -6,9 +6,6 @@ import android.content.Intent;
 
 import com.ng.syringe.util.LogUtils;
 
-/**
- * Created by Dou on 2019/7/28.
- */
 public class NgStaticReceiver extends BroadcastReceiver {
     @Override
     public void onReceive(Context context, Intent intent) {

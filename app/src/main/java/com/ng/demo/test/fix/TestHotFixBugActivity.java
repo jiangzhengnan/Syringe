@@ -10,6 +10,10 @@ import com.ng.demo.R;
 import com.ng.syringe.util.LogUtils;
 
 /**
+ * @author : jiangzhengnan.jzn@alibaba-inc.com
+ * @creation : 2021/12/25
+ * @description :
+ *
  * 测试热修复
  */
 public class TestHotFixBugActivity extends Activity {
@@ -34,7 +38,6 @@ public class TestHotFixBugActivity extends Activity {
                 startTest();
             }
         });
-
         setTitle("测试修复普通类");
     }
 

@@ -1,5 +1,6 @@
 package com.ng.demo.test.proxy;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
@@ -8,6 +9,7 @@ import android.view.View;
 import androidx.annotation.Nullable;
 
 import com.ng.demo.R;
+import com.ng.syringe.Syringe;
 import com.ng.syringe.load.GameStubActivity;
 import com.ng.syringe.util.LogUtils;
 
@@ -15,8 +17,9 @@ import com.ng.syringe.util.LogUtils;
  * @author : jiangzhengnan.jzn@alibaba-inc.com
  * @creation : 2021/12/25
  * @description :
+ *
  * 测试通过代理方式热加载各种组件
- * 在MainActivity中已经加载了可加载资源至classloader中
+ * 需要加载assets中插件game-debug.apk至classloader中
  *
  * 1.Activity
  * 通过代理实现，在ProxyActivity中，onCreate先去加载插件apk，然后通过classLoad加载真正的实现Activity。
@@ -28,14 +31,13 @@ import com.ng.syringe.util.LogUtils;
  *
  * 3.静态广播
  * PackageManagerService 会遍历遍历data/app下所有的app的Manifest，通过PackageParser扫描放到Package类中的四个集合里去
- * 所以hook顺序为:
+ * 所以hook点为:
  * (1)PackageParse类 Package parsePackage(File packageFile, int flags, boolean useCaches)
  * 反射 PackageParse类的parsePackage方法，拿到Package对象
- * (2)反射获取Package对象中的receivers，拿到广播集合
+ * (2)反射拿到Package对象中的receivers，广播集合
  * (3)通过反射PackageParser中的 generateActivityInfo 方法，拿到所有ActivityInfo，通过info的name反射创建
- * BroadcastReceiver并动态注册广播
+ * BroadcastReceiver并动态注册广播(实际上是用动态广播的方式注册了静态广播)
  *
- * 为什么静态广播重启后才生效？
  */
 public class TestHotLoadProxyActivity extends Activity implements View.OnClickListener {
 
@@ -44,12 +46,15 @@ public class TestHotLoadProxyActivity extends Activity implements View.OnClickLi
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_test_hot_fix_aty);
+        Syringe.getInstance(this).init();
+
         findViewById(R.id.btn_1).setOnClickListener(this);
         findViewById(R.id.btn_2).setOnClickListener(this);
         findViewById(R.id.btn_3).setOnClickListener(this);
         setTitle("动态加载(代理方式)");
     }
 
+    @SuppressLint("NonConstantResourceId")
     @Override
     public void onClick(View v) {
         Intent i = new Intent(this, GameStubActivity.class);

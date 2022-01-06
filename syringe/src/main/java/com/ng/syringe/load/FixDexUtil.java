@@ -103,6 +103,7 @@ public class FixDexUtil {
             Class<?> mPackageParseClass = Class.forName("android.content.pm.PackageParser");
             Method mParsePackageMethod = mPackageParseClass.getDeclaredMethod("parsePackage", File.class, int.class);
             Object mPackageParseObj = mPackageParseClass.newInstance();
+            //拿到Package对象
             Object mPackageObj = mParsePackageMethod.invoke(mPackageParseObj, new File(path), PackageManager.GET_ACTIVITIES);
             if (mPackageObj == null) {
                 return;
