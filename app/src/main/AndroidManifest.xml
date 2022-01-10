@@ -16,7 +16,7 @@
     <application
         android:name=".MyApplication"
         android:allowBackup="true"
-        android:icon="@drawable/ic_baseline_data_usage_24"
+        android:icon="@drawable/icon"
         android:label="@string/app_name"
         android:requestLegacyExternalStorage="true"
         android:supportsRtl="true">

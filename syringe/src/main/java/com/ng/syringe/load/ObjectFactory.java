@@ -34,7 +34,7 @@ public class ObjectFactory {
             return null;
         }
         try {
-            Class<T> ap = (Class<T>) Syringe.get().loadClass(classname);
+            Class<T> ap = (Class<T>) Syringe.instance().loadClass(classname);
             Method[] methods = ap.getDeclaredMethods();
             Method method = null;
             for (int i = 0; i < methods.length; i++) {
@@ -68,7 +68,7 @@ public class ObjectFactory {
             return null;
         }
         try {
-            Class<T> ap = (Class<T>) Syringe.get().loadClass(classname);
+            Class<T> ap = (Class<T>) Syringe.instance().loadClass(classname);
             Constructor<T>[] constructors = (Constructor<T>[]) ap.getDeclaredConstructors();
             Constructor<T> constructor = null;
             for (int i = 0; i < constructors.length; i++) {

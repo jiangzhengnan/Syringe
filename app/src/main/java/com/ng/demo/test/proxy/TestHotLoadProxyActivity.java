@@ -9,7 +9,6 @@ import android.view.View;
 import androidx.annotation.Nullable;
 
 import com.ng.demo.R;
-import com.ng.syringe.Syringe;
 import com.ng.syringe.load.ProxyStubActivity;
 import com.ng.syringe.util.LogUtils;
 
@@ -46,7 +45,6 @@ public class TestHotLoadProxyActivity extends Activity implements View.OnClickLi
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_test_hot_load_proxy_aty);
-        Syringe.getInstance(this).init();
 
         findViewById(R.id.btn_1).setOnClickListener(this);
         findViewById(R.id.btn_2).setOnClickListener(this);

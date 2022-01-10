@@ -1,9 +1,15 @@
 package com.ng.syringe;
 
 import android.app.Activity;
+import android.content.Context;
+
+import androidx.annotation.NonNull;
 
 import com.ng.syringe.download.DownloadHelper;
+import com.ng.syringe.hook.SyringeHookComponent;
 import com.ng.syringe.load.FixDexUtil;
+
+import java.util.concurrent.atomic.AtomicReference;
 
 /**
  * @author : jiangzhengnan.jzn@alibaba-inc.com
@@ -12,52 +18,49 @@ import com.ng.syringe.load.FixDexUtil;
  */
 public class Syringe {
 
-    private static volatile Syringe instance = null;
-
-    public static Syringe getInstance(Activity activity) {
-        if (instance == null) {
-            synchronized (Syringe.class) {
-                if (instance == null) {
-                    instance = new Syringe(activity);
-                }
-            }
-        }
-        return instance;
-    }
-
-    public static Syringe get() {
-        if (instance == null) {
-            throw new IllegalStateException("Syringe 没有初始化");
-        }
-        return instance;
-    }
-
-    private Syringe(Activity activity) {
-        this.mActivity = activity;
-    }
-
-    public void init() {
-        DownloadHelper.fakeDownLoadPlug(mActivity);
-        if (FixDexUtil.isGoingToFix(mActivity)) {
-            FixDexUtil.loadFixedDex(mActivity);
-        }
-    }
+    @NonNull
+    private volatile SyringeHookComponent mHookComponent;
 
     private ClassLoader mClassLoader;
 
-    private Activity mActivity;
+    @NonNull
+    private Context mContext;
 
-    /**
-     * 热加载文件
-     */
-    public void loadDex() {
+    private static final AtomicReference<Syringe> sReference = new AtomicReference<>();
 
+    public static void init(@NonNull Context context) {
+        if (sReference.get() == null) {
+            sReference.set(new Syringe(context));
+        }
+    }
+
+    public static Syringe instance() {
+        if (sReference.get() == null) {
+            throw new RuntimeException("Syringe haven't init");
+        }
+        return sReference.get();
+    }
+
+    private Syringe(@NonNull Context context) {
+        this.mContext = context;
+        this.mHookComponent = new SyringeHookComponent();
     }
 
 
+    public void hotLoad(@NonNull Activity activity) {
+        // 模拟下载插件
+        DownloadHelper.fakeDownLoadPlug(activity);
+        // 加载目录下的插件
+        if (FixDexUtil.isGoingToFix(activity)) {
+            FixDexUtil.loadFixedDex(activity);
+        }
+        // hook activity跳转流程
+        mHookComponent.hookStartActivity(activity);
+    }
+
     public Class<?> loadClass(String classname) throws ClassNotFoundException {
         if (mClassLoader == null) {
-            return mActivity.getClassLoader().loadClass(classname);
+            mClassLoader = mContext.getClassLoader();
         }
         return mClassLoader.loadClass(classname);
     }

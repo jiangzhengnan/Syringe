@@ -22,7 +22,7 @@ public class ProxyReceive extends BroadcastReceiver {
         this.className = className;
         //这里通过classname 得到class对象，然后
         try {
-            Class<?> receiverClass = Syringe.get().loadClass(className);
+            Class<?> receiverClass = Syringe.instance().loadClass(className);
             if (receiverClass == null) {
                 LogUtils.d("获取代理的广播为空");
                 return;

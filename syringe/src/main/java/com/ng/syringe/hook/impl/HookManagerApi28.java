@@ -1,4 +1,4 @@
-package com.ng.syringe.hook;
+package com.ng.syringe.hook.impl;
 
 import android.content.ComponentName;
 import android.content.Context;
@@ -9,6 +9,7 @@ import android.os.Message;
 import android.util.Log;
 
 import com.ng.syringe.load.ProxyActivity;
+import com.ng.syringe.util.LogUtils;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationHandler;
@@ -17,40 +18,25 @@ import java.lang.reflect.Proxy;
 
 /**
  * @author : jiangzhengnan.jzn@alibaba-inc.com
- * @creation : 2022/01/06
+ * @creation : 2022/01/10
  * @description :
- * Hook处理工具类
- * 1.拦截发送的Intent, 伪装成StubActivity, 绕过ASM检查
- * 2.拦截ActivityThread中的handler, 处理启动StubActivity的消息，转发成真正要启动的Activity
  */
-public class HookUtil {
-
-    /**
-     * public abstract class Singleton<T> {
-     * private T mInstance;
-     * <p>
-     * protected abstract T create();
-     * <p>
-     * public final T get() {
-     * synchronized (this) {
-     * if (mInstance == null) {
-     * mInstance = create();
-     * }
-     * return mInstance;
-     * }
-     * }
-     * }
-     */
-
-    private static final String TAG = "HooUtil";
+public class HookManagerApi28 implements IHookManager {
     private Context context;
+
+    public HookManagerApi28(Context context) {
+        this.context = context;
+    }
+
 
     /**
      * hook startActivity 让开启activity走自己的代理类
      */
-    public void hookStartActivity(Context context) {
-
+    @Override
+    public void hookStartActivity() {
         this.context = context;
+        //if (Build.VERSION.SDK_INT < 23) {
+
         try {
             // 基于28的源码
             Class<?> mActivityManagerClass = Class.forName("android.app.ActivityManager");
@@ -80,7 +66,7 @@ public class HookUtil {
             hookActivityThreadMH();
         } catch (Exception e) {
             e.printStackTrace();
-            Log.e(TAG, "hook startAcgtivity 出现了异常" + e.getMessage());
+            LogUtils.d("hook start Activity 出现了异常" + e.getMessage());
         }
     }
 
@@ -97,7 +83,7 @@ public class HookUtil {
         public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
             Intent oldIntent = null;
             if ("startActivity".equals(method.getName())) {
-                Log.e(TAG, "hook到了startActivity");
+                LogUtils.d("hook到了startActivity");
                 // hook startActivity 我们拿到要启动的Intent
                 int index = 0;
                 for (int i = 0; i < args.length; i++) {
@@ -123,46 +109,42 @@ public class HookUtil {
      * hook ActivityThread中的handler，处理我们的启动actiivty的消息，
      */
 
-    private void hookActivityThreadMH() {
+    private void hookActivityThreadMH() throws Exception {
 
         //1 、我们要想办法代理处理那个HandleMessage()  所以就去找静态的，
         //  找handler，但是发现handler是new出来的，所以在找ActivityThread这个类，最后找到
         // 一个 sCurrentActivityThread 这个字段，是静态，而且是它持有了自己，那么直接获取class对象
-        try {
-            Class<?> mActivityThreadClass = Class.forName("android.app.ActivityThread");
+        Class<?> mActivityThreadClass = Class.forName("android.app.ActivityThread");
 
-            Field mSCurrntActivityThreadField = mActivityThreadClass.getDeclaredField("sCurrentActivityThread");
+        Field mSCurrntActivityThreadField = mActivityThreadClass.getDeclaredField("sCurrentActivityThread");
 
-            //然后我们通过静态对象 可以获取到ActivityThread的对象，而且是系统创建的对象
-            mSCurrntActivityThreadField.setAccessible(true);
-            Object mActivityThreadObj = mSCurrntActivityThreadField.get(null);
-            //在获取反射获取mh
+        //然后我们通过静态对象 可以获取到ActivityThread的对象，而且是系统创建的对象
+        mSCurrntActivityThreadField.setAccessible(true);
+        Object mActivityThreadObj = mSCurrntActivityThreadField.get(null);
+        //在获取反射获取mh
 
-            Field mHandlerField = mActivityThreadClass.getDeclaredField("mH");
-            mHandlerField.setAccessible(true);
+        Field mHandlerField = mActivityThreadClass.getDeclaredField("mH");
+        mHandlerField.setAccessible(true);
 
-            //这一步我们就拿到了mH这个对象
-            Object mHandlerObj = mHandlerField.get(mActivityThreadObj);
-
-
-            // 下面我就要考虑是用动态代理还是用设置接口，来让handlerMessage先处理我们的，通过handler的dispatchMessage的方法 而且内部是提供接口，
-            // 那就这里不用动态代理了，用提供的接口
-
-            //接着还是用反射 ，给注入一个callback
-
-            Class<?> mHandlerClass = Class.forName("android.os.Handler");
-
-            Field mHandlerCallbackField = mHandlerClass.getDeclaredField("mCallback");
-
-            mHandlerCallbackField.setAccessible(true);
+        //这一步我们就拿到了mH这个对象
+        Object mHandlerObj = mHandlerField.get(mActivityThreadObj);
 
 
-            //给注入一个callback
-            HandlerCallback handlerCallback = new HandlerCallback((Handler) mHandlerObj);
-            mHandlerCallbackField.set(mHandlerObj, handlerCallback);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        // 下面我就要考虑是用动态代理还是用设置接口，来让handlerMessage先处理我们的，通过handler的dispatchMessage的方法 而且内部是提供接口，
+        // 那就这里不用动态代理了，用提供的接口
+
+        //接着还是用反射 ，给注入一个callback
+
+        Class<?> mHandlerClass = Class.forName("android.os.Handler");
+
+        Field mHandlerCallbackField = mHandlerClass.getDeclaredField("mCallback");
+
+        mHandlerCallbackField.setAccessible(true);
+
+
+        //给注入一个callback
+        HandlerCallback handlerCallback = new HandlerCallback((Handler) mHandlerObj);
+        mHandlerCallbackField.set(mHandlerObj, handlerCallback);
 
     }
 
@@ -227,6 +209,7 @@ public class HookUtil {
 
         } catch (Exception e) {
             e.printStackTrace();
+            LogUtils.d("hook handle Activity 出现异常:" + e.getMessage().toString());
         }
 
     }
@@ -250,5 +233,4 @@ public class HookUtil {
      *         }
      *     }
      */
-
 }

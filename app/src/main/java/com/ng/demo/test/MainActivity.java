@@ -20,11 +20,13 @@ import com.ng.demo.permission.PermissionsActivity;
 import com.ng.demo.test.fix.TestHotFixBugActivity;
 import com.ng.demo.test.hook.TestHotLoadHookActivity;
 import com.ng.demo.test.proxy.TestHotLoadProxyActivity;
+import com.ng.syringe.Syringe;
 
 /**
  * @author : jiangzhengnan.jzn
  * @creation : 2021/12/15
  * @description :
+ *
  */
 public class MainActivity extends PermissionsActivity {
     private static final int requestFullFilePermissionCode = 1;
@@ -40,6 +42,7 @@ public class MainActivity extends PermissionsActivity {
                 Manifest.permission.READ_EXTERNAL_STORAGE,
                 Manifest.permission.READ_PHONE_STATE,
                 Manifest.permission.INTERNET);
+
     }
 
     @Override
@@ -56,9 +59,9 @@ public class MainActivity extends PermissionsActivity {
             runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
-                    initView();
-
-                    //startActivity(new Intent(MainActivity.this, TestHotLoadHookActivity.class));
+                    Syringe.instance().hotLoad(MainActivity.this);
+                    //initView();
+                    startActivity(new Intent(MainActivity.this, TestHotLoadHookActivity.class));
                 }
             });
         } else {
@@ -78,7 +81,6 @@ public class MainActivity extends PermissionsActivity {
         addFunction("热修复普通类", TestHotFixBugActivity.class);
         addFunction("热加载组件 (通过代理实现，开发有感知)", TestHotLoadProxyActivity.class);
         addFunction("热加载组件 (通过Hook实现，开发无感知)", TestHotLoadHookActivity.class);
-
     }
 
     private void addFunction(String showStr, Class targetClass) {

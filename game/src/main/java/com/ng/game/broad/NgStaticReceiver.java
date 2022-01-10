@@ -9,6 +9,6 @@ import com.ng.syringe.util.LogUtils;
 public class NgStaticReceiver extends BroadcastReceiver {
     @Override
     public void onReceive(Context context, Intent intent) {
-        LogUtils.d("收到了静态广播");
+        LogUtils.d(context.getClass().getName() + "收到了静态广播");
     }
 }

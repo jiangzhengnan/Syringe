@@ -4,8 +4,13 @@
 
     <application >
 
-        <!-- 动态加载 aty 需要的占坑aty -->
+        <!-- 动态加载 aty 代理方式需要的占坑aty -->
         <activity android:name="com.ng.syringe.load.ProxyStubActivity" />
+
+        <!-- 动态加载 aty Hook方式需要的占坑aty -->
+        <activity android:name=".hook.HookStubActivity"/>
+
+        <activity android:name=".hook.LoginActivity"/>
 
     </application>
 </manifest>
