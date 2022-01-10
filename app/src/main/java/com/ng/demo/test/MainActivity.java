@@ -60,8 +60,8 @@ public class MainActivity extends PermissionsActivity {
                 @Override
                 public void run() {
                     Syringe.instance().hotLoad(MainActivity.this);
-                    //initView();
-                    startActivity(new Intent(MainActivity.this, TestHotLoadHookActivity.class));
+                    initView();
+                    //startActivity(new Intent(MainActivity.this, TestHotLoadHookActivity.class));
                 }
             });
         } else {
