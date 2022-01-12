@@ -1,16 +1,13 @@
 package com.ng.game;
 
 import android.app.Activity;
-import android.content.pm.ApplicationInfo;
-import android.content.pm.PackageInfo;
-import android.content.pm.PackageManager;
 import android.content.res.AssetManager;
 import android.content.res.Resources;
 import android.os.Bundle;
 
 import androidx.annotation.Nullable;
 
-import com.ng.syringe.load.ObjectFactory;
+import com.ng.syringe.load.ObjectFactoryUtil;
 import com.ng.syringe.util.LogUtils;
 
 /**
@@ -40,8 +37,8 @@ public class NgGameLevelThreeActivity extends Activity {
     protected void loadPluginResource(String apkPath) {
         LogUtils.d("[加载资源] apkPath:" + apkPath);
         try {
-            mAssetManager = ObjectFactory.make(AssetManager.class);
-            ObjectFactory.invokeMethod(mAssetManager, AssetManager.class.getName(),
+            mAssetManager = ObjectFactoryUtil.make(AssetManager.class);
+            ObjectFactoryUtil.invokeMethod(mAssetManager, AssetManager.class.getName(),
                     "addAssetPath", apkPath);
             mResources = new Resources(mAssetManager,
                     super.getResources().getDisplayMetrics(),

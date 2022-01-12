@@ -1,8 +1,10 @@
-package com.ng.syringe.load;
+package com.ng.syringe.load.proxy.stub;
 
 import android.os.Bundle;
 
 import androidx.annotation.Nullable;
+
+import com.ng.syringe.load.proxy.ProxyActivity;
 
 /**
  * 占位代理Activity

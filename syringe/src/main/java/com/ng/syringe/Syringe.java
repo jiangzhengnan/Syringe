@@ -5,9 +5,8 @@ import android.content.Context;
 
 import androidx.annotation.NonNull;
 
-import com.ng.syringe.download.DownloadHelper;
-import com.ng.syringe.hook.SyringeHookComponent;
-import com.ng.syringe.load.FixDexUtil;
+import com.ng.syringe.download.SyringeDownLoadComponent;
+import com.ng.syringe.load.SyringeLoadComponent;
 
 import java.util.concurrent.atomic.AtomicReference;
 
@@ -15,13 +14,15 @@ import java.util.concurrent.atomic.AtomicReference;
  * @author : jiangzhengnan.jzn@alibaba-inc.com
  * @creation : 2021/12/18
  * @description :
+ * 统一收束入口
  */
 public class Syringe {
 
     @NonNull
-    private volatile SyringeHookComponent mHookComponent;
+    private volatile SyringeLoadComponent mLoadComponent;
 
-    private ClassLoader mClassLoader;
+    @NonNull
+    private volatile SyringeDownLoadComponent mDownLoadComponent;
 
     @NonNull
     private Context mContext;
@@ -43,26 +44,19 @@ public class Syringe {
 
     private Syringe(@NonNull Context context) {
         this.mContext = context;
-        this.mHookComponent = new SyringeHookComponent();
+        this.mLoadComponent = new SyringeLoadComponent();
+        this.mDownLoadComponent = new SyringeDownLoadComponent();
     }
 
-
-    public void hotLoad(@NonNull Activity activity) {
-        // 模拟下载插件
-        DownloadHelper.fakeDownLoadPlug(activity);
-        // 加载目录下的插件
-        if (FixDexUtil.isGoingToFix(activity)) {
-            FixDexUtil.loadFixedDex(activity);
-        }
-        // hook activity跳转流程
-        mHookComponent.hookStartActivity(activity);
+    public void loadPlug(@NonNull Activity activity) {
+        // 下载插件
+        mDownLoadComponent.fakeDownLoadPlug(activity, null);
+        // 安装插件
+        mLoadComponent.loadPlug(activity, mDownLoadComponent.getDexDirFilePath(mContext));
     }
 
     public Class<?> loadClass(String classname) throws ClassNotFoundException {
-        if (mClassLoader == null) {
-            mClassLoader = mContext.getClassLoader();
-        }
-        return mClassLoader.loadClass(classname);
+        return mContext.getClassLoader().loadClass(classname);
     }
 
 }

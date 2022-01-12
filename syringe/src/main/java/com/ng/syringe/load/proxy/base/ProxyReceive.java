@@ -1,4 +1,4 @@
-package com.ng.syringe.load.base;
+package com.ng.syringe.load.proxy.base;
 
 import android.content.BroadcastReceiver;
 import android.content.Context;

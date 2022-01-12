@@ -6,9 +6,9 @@ import android.view.View;
 
 import androidx.annotation.Nullable;
 
-import com.ng.syringe.load.base.ActivityProxyAbs;
-import com.ng.syringe.load.ProxyStubActivity;
-import com.ng.syringe.load.ProxyActivity;
+import com.ng.syringe.load.proxy.base.ActivityProxyAbs;
+import com.ng.syringe.load.proxy.stub.ProxyStubActivity;
+import com.ng.syringe.load.proxy.ProxyActivity;
 
 /**
  * @author : jiangzhengnan.jzn@alibaba-inc.com

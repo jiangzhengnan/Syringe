@@ -5,12 +5,10 @@
     <application >
 
         <!-- 动态加载 aty 代理方式需要的占坑aty -->
-        <activity android:name="com.ng.syringe.load.ProxyStubActivity" />
+        <activity android:name="com.ng.syringe.load.proxy.stub.ProxyStubActivity" />
 
         <!-- 动态加载 aty Hook方式需要的占坑aty -->
-        <activity android:name=".hook.HookStubActivity"/>
-
-        <activity android:name=".hook.LoginActivity"/>
+        <activity android:name=".load.hook.stub.HookStubActivity"/>
 
     </application>
 </manifest>

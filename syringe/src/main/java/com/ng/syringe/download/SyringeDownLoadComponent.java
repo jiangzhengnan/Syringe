@@ -4,6 +4,7 @@ import android.content.Context;
 import android.os.Environment;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 
 import com.ng.syringe.util.FileUtils;
 import com.ng.syringe.util.LogUtils;
@@ -21,17 +22,17 @@ import java.net.URLConnection;
  * @creation : 2021/12/18
  * @description :
  */
-public class DownloadHelper {
-    private static final String dexDirPath = "/AAAAA";
+public class SyringeDownLoadComponent {
+    private final String dexDirPath = "/AAAAA";
 
-    public static String getDexDirFilePath(@NonNull Context context) {
+    public String getDexDirFilePath(@NonNull Context context) {
         return getSDPath(context) + dexDirPath;
     }
 
     /**
      * 从assets下载插件
      */
-    public static void fakeDownLoadPlug(@NonNull Context context) {
+    public void fakeDownLoadPlug(@NonNull Context context, @Nullable DownloadCallBack callBack) {
         try {
             String[] fileNames = context.getAssets().list("");
             for (String tmpName : fileNames) {
@@ -39,10 +40,18 @@ public class DownloadHelper {
                     String dstPath = getDexDirFilePath(context) + "/" + tmpName;
                     LogUtils.d("模拟下载插件:" + tmpName + " 至:" + dstPath);
                     FileUtils.copyFileFromAssets(context, tmpName, dstPath);
+                    if (callBack != null) {
+                        callBack.onCompleted(dstPath);
+                    }
                 }
             }
-
+            if (callBack != null) {
+                callBack.onSuccess();
+            }
         } catch (IOException e) {
+            if (callBack != null) {
+                callBack.onError(-1, e.getMessage());
+            }
             e.printStackTrace();
         }
     }
@@ -50,7 +59,7 @@ public class DownloadHelper {
     /**
      * 联网下载插件
      */
-    public static void downloadPlug(
+    public void downloadPlug(
             @NonNull Context context,
             @NonNull String downloadUrl,
             @NonNull String fileName,
@@ -127,7 +136,7 @@ public class DownloadHelper {
     private void downLoadDex(Context context) {
         String remoteDexPath = "https://qfile.okntc.com/BugTest.dex";
         LogUtils.d("下载插件: " + remoteDexPath);
-        DownloadHelper.downloadPlug(
+        downloadPlug(
                 context,
                 remoteDexPath,
                 "BugTest.dex",
@@ -155,6 +164,11 @@ public class DownloadHelper {
                     @Override
                     public void onCompleted(String filePath) {
                         LogUtils.d("下载完成");
+                    }
+
+                    @Override
+                    public void onSuccess() {
+
                     }
 
                     @Override

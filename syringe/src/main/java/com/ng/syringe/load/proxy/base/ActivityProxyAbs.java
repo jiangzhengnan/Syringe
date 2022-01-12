@@ -1,4 +1,4 @@
-package com.ng.syringe.load.base;
+package com.ng.syringe.load.proxy.base;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -7,7 +7,7 @@ import android.view.KeyEvent;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
-import com.ng.syringe.load.ProxyActivity;
+import com.ng.syringe.load.proxy.ProxyActivity;
 import com.ng.syringe.load.SplitResUtils;
 
 public abstract class ActivityProxyAbs {

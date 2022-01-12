@@ -1,4 +1,4 @@
-package com.ng.syringe.load;
+package com.ng.syringe.load.proxy;
 
 import android.app.Activity;
 import android.content.BroadcastReceiver;
@@ -16,8 +16,9 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 import com.ng.syringe.R;
-import com.ng.syringe.load.base.ActivityProxyAbs;
-import com.ng.syringe.load.base.ProxyReceive;
+import com.ng.syringe.load.ObjectFactoryUtil;
+import com.ng.syringe.load.proxy.base.ActivityProxyAbs;
+import com.ng.syringe.load.proxy.base.ProxyReceive;
 import com.ng.syringe.util.LogUtils;
 
 
@@ -43,7 +44,7 @@ public abstract class ProxyActivity extends Activity {
         loadPluginResource(mTargetResPath);
         LogUtils.d("传入的 res path: " + mTargetResPath);
         LogUtils.d("传入的 activity: " + mTargetActivityClassName);
-        proxy = ObjectFactory.make(mTargetActivityClassName, this);
+        proxy = ObjectFactoryUtil.make(mTargetActivityClassName, this);
         if (proxy != null) {
             LogUtils.d("创建" + mTargetActivityClassName + "成功");
             proxy.onCreate(savedInstanceState);
@@ -69,8 +70,8 @@ public abstract class ProxyActivity extends Activity {
     protected void loadPluginResource(String apkPath) {
         LogUtils.d("[加载资源] apkPath:" + apkPath);
         try {
-            mAssetManager = ObjectFactory.make(AssetManager.class);
-            ObjectFactory.invokeMethod(mAssetManager, AssetManager.class.getName(),
+            mAssetManager = ObjectFactoryUtil.make(AssetManager.class);
+            ObjectFactoryUtil.invokeMethod(mAssetManager, AssetManager.class.getName(),
                     "addAssetPath", apkPath);
             mResources = new Resources(mAssetManager,
                     super.getResources().getDisplayMetrics(),

@@ -1,4 +1,4 @@
-package com.ng.syringe.hook;
+package com.ng.syringe.load.hook.stub;
 
 import android.app.Activity;
 import android.os.Bundle;

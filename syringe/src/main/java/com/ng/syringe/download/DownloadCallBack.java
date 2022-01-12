@@ -17,6 +17,8 @@ public interface DownloadCallBack {
 
     void onCompleted(String filePath);
 
+    void onSuccess();
+
     void onError(int errorCode, String errorMsg);
 
 }

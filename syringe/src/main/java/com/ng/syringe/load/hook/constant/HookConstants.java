@@ -1,4 +1,4 @@
-package com.ng.syringe.hook.constant;
+package com.ng.syringe.load.hook.constant;
 
 /**
  * @author : jiangzhengnan.jzn@alibaba-inc.com

@@ -4,7 +4,7 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 
-import com.ng.syringe.load.base.BroadCastProxyInterface;
+import com.ng.syringe.load.proxy.base.BroadCastProxyInterface;
 import com.ng.syringe.util.LogUtils;
 import com.ng.syringe.util.UIUtils;
 

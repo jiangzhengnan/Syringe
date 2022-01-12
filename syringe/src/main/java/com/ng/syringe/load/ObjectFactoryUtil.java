@@ -10,7 +10,7 @@ import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 
-public class ObjectFactory {
+public class ObjectFactoryUtil {
     private final static HashMap<Class, String> mapMemberClass = new HashMap<Class, String>(8);
 
     static {

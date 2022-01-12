@@ -1,4 +1,6 @@
-package com.ng.syringe.hook.impl;
+package com.ng.syringe.load.hook.impl;
+
+import android.app.Activity;
 
 /**
  * @author : jiangzhengnan.jzn@alibaba-inc.com
@@ -7,4 +9,7 @@ package com.ng.syringe.hook.impl;
  */
 public interface IHookManager {
     void hookStartActivity();
+
+    void hookReceivers(Activity activity, String path);
+
 }

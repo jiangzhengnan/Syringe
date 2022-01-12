@@ -59,7 +59,7 @@ public class MainActivity extends PermissionsActivity {
             runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
-                    Syringe.instance().hotLoad(MainActivity.this);
+                    Syringe.instance().loadPlug(MainActivity.this);
                     initView();
                     //startActivity(new Intent(MainActivity.this, TestHotLoadHookActivity.class));
                 }

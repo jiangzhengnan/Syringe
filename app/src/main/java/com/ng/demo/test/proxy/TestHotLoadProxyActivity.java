@@ -9,7 +9,7 @@ import android.view.View;
 import androidx.annotation.Nullable;
 
 import com.ng.demo.R;
-import com.ng.syringe.load.ProxyStubActivity;
+import com.ng.syringe.load.proxy.stub.ProxyStubActivity;
 import com.ng.syringe.util.LogUtils;
 
 /**

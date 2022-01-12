@@ -9,7 +9,7 @@ import android.view.View;
 import androidx.annotation.Nullable;
 
 import com.ng.demo.R;
-import com.ng.syringe.hook.HookStubActivity;
+import com.ng.syringe.load.hook.stub.HookStubActivity;
 
 /**
  * @author : jiangzhengnan.jzn@alibaba-inc.com
