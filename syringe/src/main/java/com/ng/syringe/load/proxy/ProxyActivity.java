@@ -25,6 +25,7 @@ import com.ng.syringe.util.LogUtils;
 /**
  * 被代理器完全支配的activity
  * 在onCreate中生成真正的代理
+ *
  * @see ActivityProxyAbs
  */
 
@@ -44,7 +45,7 @@ public abstract class ProxyActivity extends Activity {
         loadPluginResource(mTargetResPath);
         LogUtils.d("传入的 res path: " + mTargetResPath);
         LogUtils.d("传入的 activity: " + mTargetActivityClassName);
-        proxy = ObjectFactoryUtil.make(mTargetActivityClassName, this);
+        proxy = ObjectFactoryUtil.make(this, mTargetActivityClassName, this);
         if (proxy != null) {
             LogUtils.d("创建" + mTargetActivityClassName + "成功");
             proxy.onCreate(savedInstanceState);
@@ -70,8 +71,8 @@ public abstract class ProxyActivity extends Activity {
     protected void loadPluginResource(String apkPath) {
         LogUtils.d("[加载资源] apkPath:" + apkPath);
         try {
-            mAssetManager = ObjectFactoryUtil.make(AssetManager.class);
-            ObjectFactoryUtil.invokeMethod(mAssetManager, AssetManager.class.getName(),
+            mAssetManager = ObjectFactoryUtil.make(this, AssetManager.class);
+            ObjectFactoryUtil.invokeMethod(this, mAssetManager, AssetManager.class.getName(),
                     "addAssetPath", apkPath);
             mResources = new Resources(mAssetManager,
                     super.getResources().getDisplayMetrics(),
@@ -217,6 +218,6 @@ public abstract class ProxyActivity extends Activity {
             newIntentFilter.addAction(filter.getAction(i));
         }
         LogUtils.d("通过代理方法注册广播");
-        return super.registerReceiver(new ProxyReceive(receiver.getClass().getName(),this), newIntentFilter);
+        return super.registerReceiver(new ProxyReceive(receiver.getClass().getName(), this), newIntentFilter);
     }
 }

@@ -2,3 +2,4 @@ rootProject.name = "Syringe"
 include ':app'
 include ':syringe'
 include ':game'
+include ':syringeBuild'

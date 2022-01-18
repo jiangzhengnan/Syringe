@@ -1,7 +1,7 @@
 package com.ng.syringe.load;
 
 
-import com.ng.syringe.Syringe;
+import android.content.Context;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
@@ -24,17 +24,17 @@ public class ObjectFactoryUtil {
         mapMemberClass.put(Byte.class, "byte");
     }
 
-    public static <T> T invokeStaticMethod(String classname, String methodName, Object... pram) {
-        return invokeMethod(null, classname, methodName, pram);
+    public static <T> T invokeStaticMethod(Context context, String classname, String methodName, Object... pram) {
+        return invokeMethod(context, null, classname, methodName, pram);
     }
 
-    public static <T> T invokeMethod(Object object, String classname, String methodName,
+    public static <T> T invokeMethod(Context context, Object object, String classname, String methodName,
                                      Object... pram) {
         if (classname == null || methodName == null || classname.length() == 0 || methodName.length() == 0) {
             return null;
         }
         try {
-            Class<T> ap = (Class<T>) Syringe.instance().loadClass(classname);
+            Class<T> ap = (Class<T>) context.getClassLoader().loadClass(classname);
             Method[] methods = ap.getDeclaredMethods();
             Method method = null;
             for (int i = 0; i < methods.length; i++) {
@@ -59,16 +59,16 @@ public class ObjectFactoryUtil {
         return null;
     }
 
-    public static <T> T make(Class<T> clazz, Object... pram) {
-        return make(clazz.getName(), pram);
+    public static <T> T make(Context context, Class<T> clazz, Object... pram) {
+        return make(context, clazz.getName(), pram);
     }
 
-    public static <T> T make(String classname, Object... pram) {
+    public static <T> T make(Context context, String classname, Object... pram) {
         if (classname == null || classname.length() == 0) {
             return null;
         }
         try {
-            Class<T> ap = (Class<T>) Syringe.instance().loadClass(classname);
+            Class<T> ap = (Class<T>) context.getClassLoader().loadClass(classname);
             Constructor<T>[] constructors = (Constructor<T>[]) ap.getDeclaredConstructors();
             Constructor<T> constructor = null;
             for (int i = 0; i < constructors.length; i++) {

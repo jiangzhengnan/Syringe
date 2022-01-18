@@ -59,7 +59,7 @@ public class MainActivity extends PermissionsActivity {
             runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
-                    Syringe.instance().loadPlug(MainActivity.this);
+                    Syringe.instance().hookActivity(MainActivity.this);
                     initView();
                     //startActivity(new Intent(MainActivity.this, TestHotLoadHookActivity.class));
                 }
@@ -78,9 +78,9 @@ public class MainActivity extends PermissionsActivity {
     }
 
     private void initView() {
-        addFunction("热修复普通类", TestHotFixBugActivity.class);
-        addFunction("热加载组件 (通过代理实现，开发有感知)", TestHotLoadProxyActivity.class);
-        addFunction("热加载组件 (通过Hook实现，开发无感知)", TestHotLoadHookActivity.class);
+        addFunction("(1) 热修复普通类", TestHotFixBugActivity.class);
+        addFunction("(2) 热加载组件 (通过代理实现，开发有感知)", TestHotLoadProxyActivity.class);
+        addFunction("(3) 热加载组件 (通过Hook实现，开发无感知)", TestHotLoadHookActivity.class);
     }
 
     private void addFunction(String showStr, Class targetClass) {
