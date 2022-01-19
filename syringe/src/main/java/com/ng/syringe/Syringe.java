@@ -2,14 +2,13 @@ package com.ng.syringe;
 
 import android.app.Activity;
 import android.content.Context;
-import android.content.res.AssetManager;
 import android.content.res.Resources;
+import android.text.TextUtils;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 import com.ng.syringe.download.SyringeDownLoadComponent;
-import com.ng.syringe.load.ObjectFactoryUtil;
 import com.ng.syringe.load.SyringeLoadComponent;
 import com.ng.syringe.util.LogUtils;
 
@@ -50,7 +49,7 @@ public class Syringe {
 
     private Syringe(@NonNull Context context) {
         this.mContext = context;
-        this.mLoadComponent = new SyringeLoadComponent();
+        this.mLoadComponent = new SyringeLoadComponent(context);
         this.mDownLoadComponent = new SyringeDownLoadComponent();
     }
 
@@ -61,31 +60,24 @@ public class Syringe {
         mLoadComponent.loadPlug(context, mDownLoadComponent.getDexDirFilePath(mContext));
     }
 
-    protected AssetManager mAssetManager;
-    protected Resources mResources;
-
     /**
      * 加载dex到Resources中
      */
-    public void loadResources(String dexPath) {
-        LogUtils.d("[加载资源] dexPath:" + dexPath);
-        try {
-            mAssetManager = ObjectFactoryUtil.make(mContext, AssetManager.class);
-            ObjectFactoryUtil.invokeMethod(mContext, mAssetManager, AssetManager.class.getName(),
-                    "addAssetPath", dexPath);
-            mResources = new Resources(mAssetManager,
-                    mContext.getResources().getDisplayMetrics(),
-                    mContext.getResources().getConfiguration());
-        } catch (Exception e) {
-            e.printStackTrace();
+    public void loadResources(@Nullable String dexPath) {
+        if (TextUtils.isEmpty(dexPath)) {
+            LogUtils.d("[加载资源] 取消，资源为空");
+            return;
         }
+        LogUtils.d("[加载资源] dexPath:" + dexPath);
+        mLoadComponent.loadResources(dexPath);
     }
 
+    //todo old 逻辑 改为自动注入？
     /**
      * 注入Resources
      */
-    public void injectResources(@Nullable Activity activity,@Nullable Resources resources) {
-
+    public void injectResources(@Nullable Context context, @Nullable Resources resources) {
+        mLoadComponent.injectResources(context, resources);
     }
 
     //todo old 逻辑 改为自动注入？

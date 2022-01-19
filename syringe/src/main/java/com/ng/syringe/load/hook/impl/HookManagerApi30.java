@@ -160,11 +160,12 @@ public class HookManagerApi30 implements IHookManager {
 
         @Override
         public boolean handleMessage(Message msg) {
-            LogUtils.d(TAG + "hook Activity Thread Handler:" + msg.what + "");
+            //LogUtils.d(TAG + "hook Activity Thread Handler:" + msg.what + "");
             //Handler的dispatchMessage有3个callback优先级，首先是msg自带的callback，其次是Handler的成员mCallback,最后才是Handler类自身的handlerMessage方法,
             //它成员mCallback.handleMessage的返回值为true，则不会继续往下执行 Handler.handlerMessage
             //我们这里只是要hook，插入逻辑，所以必须返回false，让Handler原本的handlerMessage能够执行.
             if (msg.what == EXECUTE_TRANSACTION) {//这是跳转的时候,要对intent进行还原
+                LogUtils.d(TAG + "hook Activity Thread Handler:" + msg.what + " 这是跳转的时候,要对intent进行还原");
                 try {
                     //先把相关@hide的类都建好
                     Class<?> ClientTransactionClz = Class.forName("android.app.servertransaction.ClientTransaction");
