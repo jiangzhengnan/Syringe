@@ -72,20 +72,21 @@ public class Syringe {
         mLoadComponent.loadResources(dexPath);
     }
 
-    //todo old 逻辑 改为自动注入？
     /**
-     * 注入Resources
-     */
-    public void injectResources(@Nullable Context context, @Nullable Resources resources) {
-        mLoadComponent.injectResources(context, resources);
-    }
-
-    //todo old 逻辑 改为自动注入？
-    /**
+     * todo old 逻辑 改为自动注入？
      * 1.hook aty 启动流程
      * 2.代理注册广播
      */
     public void hookActivity(@NonNull Activity activity) {
         mLoadComponent.hookActivity(activity);
     }
+
+    /**
+     * todo old 逻辑 改为自动注入？
+     * 注入Resources (Qigsaw逻辑，暂时没有用)
+     */
+    public void injectResources(@Nullable Context context, @Nullable Resources resources) {
+        mLoadComponent.injectResources(context, resources);
+    }
+
 }
