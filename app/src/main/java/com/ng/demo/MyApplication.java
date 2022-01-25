@@ -1,7 +1,6 @@
 package com.ng.demo;
 
 import android.content.Context;
-import android.content.res.Resources;
 import android.support.multidex.MultiDex;
 import android.support.multidex.MultiDexApplication;
 
@@ -19,14 +18,6 @@ public class MyApplication extends MultiDexApplication {
         super.attachBaseContext(base);
         MultiDex.install(this);
         Syringe.init(this);
-    }
-
-
-    @Override
-    public Resources getResources() {
-        Syringe.init(this);
-        Syringe.instance().injectResources(this, super.getResources());
-        return super.getResources();
     }
 
 }

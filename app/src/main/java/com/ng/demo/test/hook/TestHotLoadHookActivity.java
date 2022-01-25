@@ -48,7 +48,7 @@ public class TestHotLoadHookActivity extends Activity implements View.OnClickLis
      */
     private void startToNgGameLevelThreeActivity() {
         Intent i = new Intent(this, HookStubActivity.class);
-        i.putExtra("targetActivity", "com.ng.game.NgGameLevelThreeActivity");
+        i.putExtra("targetActivity", "com.ng.novel.NgNovelActivity");
         startActivity(i);
     }
 }

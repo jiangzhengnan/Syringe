@@ -16,6 +16,8 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.URL;
 import java.net.URLConnection;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * @author : jiangzhengnan.jzn@alibaba-inc.com
@@ -29,6 +31,8 @@ public class SyringeDownLoadComponent {
         return getSDPath(context) + dexDirPath;
     }
 
+    private List<String> mDownLoadedList = new ArrayList<>();
+
     /**
      * 从assets下载插件
      */
@@ -36,10 +40,14 @@ public class SyringeDownLoadComponent {
         try {
             String[] fileNames = context.getAssets().list("");
             for (String tmpName : fileNames) {
+                if (mDownLoadedList.contains(tmpName)) {
+                    continue;
+                }
                 if (tmpName.endsWith(".dex") || tmpName.endsWith(".apk")) {
                     String dstPath = getDexDirFilePath(context) + "/" + tmpName;
                     LogUtils.d("模拟下载插件:" + tmpName + " 至:" + dstPath);
                     FileUtils.copyFileFromAssets(context, tmpName, dstPath);
+                    mDownLoadedList.add(tmpName);
                     if (callBack != null) {
                         callBack.onCompleted(dstPath);
                     }

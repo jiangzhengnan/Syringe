@@ -1,4 +1,4 @@
-package com.ng.game;
+package com.ng.novel;
 
 import android.app.Activity;
 import android.content.res.Resources;
@@ -16,12 +16,12 @@ import com.ng.syringe.Syringe;
  * todo 需要改为asm编织getResources，使得开发无感知
  *
  */
-public class NgGameLevelThreeActivity extends Activity {
+public class NgNovelActivity extends Activity {
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_game_three);
+        setContentView(R.layout.activity_novel);
     }
 
     @Override

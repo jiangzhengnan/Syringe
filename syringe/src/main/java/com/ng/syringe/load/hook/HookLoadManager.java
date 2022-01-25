@@ -47,6 +47,7 @@ public class HookLoadManager {
     public final String DEX_DIR = "odex";
     private final String OPTIMIZE_DEX_DIR = "optimize_dex";
 
+    private HashSet<File> needLoadDex = new HashSet<>();
     private HashSet<File> loadedDex = new HashSet<>();
 
 
@@ -54,7 +55,7 @@ public class HookLoadManager {
      * 加载补丁
      */
     public void loadPlug(@NonNull Context context, @NonNull String plugPath) {
-        loadedDex.clear();
+        needLoadDex.clear();
         if (isGoingToFix(plugPath)) {
             doDexInject(context, plugPath);
         }
@@ -69,8 +70,11 @@ public class HookLoadManager {
         try {
             // 1.加载应用程序dex的Loader
             PathClassLoader appClassLoader = (PathClassLoader) context.getClassLoader();
-            if (loadedDex.size() > 0) {
-                for (File dex : loadedDex) {
+            if (needLoadDex.size() > 0) {
+                for (File dex : needLoadDex) {
+                    if (loadedDex.contains(dex)) {
+                        continue;
+                    }
                     String dexPath = dex.getAbsolutePath();
                     // 2.加载指定的修复的dex文件的Loader
                     DexClassLoader dexLoader = new DexClassLoader(
@@ -100,8 +104,11 @@ public class HookLoadManager {
 
                     // 加载资源
                     Syringe.instance().loadResources(dexPath);
+
+                    loadedDex.add(dex);
+                    LogUtils.d("[加载插件] 遍历加载 dexPath:" + dexPath);
                 }
-                LogUtils.d("[加载插件] 修复完成:" + loadedDex.toString());
+                LogUtils.d("[加载插件] 全部修复完成:" + loadedDex.toString());
                 //Toast.makeText(context, "修复完成", Toast.LENGTH_SHORT).show();
             } else {
                 LogUtils.d("[加载插件] 修复失败,loadedDex为空");
@@ -130,7 +137,7 @@ public class HookLoadManager {
                         || file.getName().endsWith(JAR_SUFFIX)
                         || file.getName().endsWith(ZIP_SUFFIX)) {
 
-                    loadedDex.add(file);// 存入集合
+                    needLoadDex.add(file);// 存入集合
                     //有目标dex文件, 需要修复
                     LogUtils.d("[加载插件] 有目标dex文件, 需要修复:" + file.getAbsolutePath() + " " + file.getName());
                     result = true;
