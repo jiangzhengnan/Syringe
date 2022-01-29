@@ -1,5 +1,8 @@
 简体中文 | [English](./README.en.md) |<br />
 # Syringe
+![Java](https://img.shields.io/badge/language-Java-red.svg)
+![visitors](https://visitor-badge.laobi.icu/badge?page_id=jiangzhengnan.syringe.read.me)
+</br>
 📌  插件化注入工程</br>
 
 ## 介绍
@@ -13,9 +16,45 @@
 本框架希望侧重于减少包体积size，不断集成并持续更新目前各种热加载以及热修复手段，以期在我们具体的使用时，在不同场景下达到灵活运用和最佳实践。</br>
 持续开发中。</br>
 
-## 待完成需求
-- [x] 增加ASM自动注入资源功能
+### 引入方式
+待上传到Maven,目前可以clone项目然后主动依赖
+<br/>
 
+### 使用方式
+1.在Application中初始化Syringe</br>
+```
+public class MyApplication extends MultiDexApplication {
+    @Override
+    protected void attachBaseContext(Context base) {
+        super.attachBaseContext(base);
+        MultiDex.install(this);
+        Syringe.init(this);
+    }
+}
+```
+2.代理(占坑)方式启动热加载的Activity</br>
+```
+Intent i = new Intent(this, ProxyStubActivity.class);
+i.putExtra(ProxyStubActivity.INTENT_CLASS_NAME, "com.ng.game.NgGameLevelOneActivity");
+i.putExtra(ProxyStubActivity.INTENT_RES_PATH, "/storage/emulated/0/AAAAA/game-debug.apk");
+tartActivity(i);
+```
+3.hook方式启动热加载的Activity</br>
+```
+Intent i = new Intent(this, HookStubActivity.class);
+i.putExtra("targetActivity", "com.ng.novel.NgNovelActivity");
+startActivity(i);
+```
+4.
+具体实现参考Demo：
+https://github.com/jiangzhengnan/Syringe/blob/master/app/src/main/java/com/ng/demo/test/MainActivity.java</br>
+
+## 待完成需求
+- [x] Service和ContentProvider的热加载实现
+- [x] aab方式实现热加载
+- [x] 补丁包版本控制
+- [x] 补丁包差量分析，自定合成
+- [x] 打包脚本自动化
 ### License
 
     Copyright 2021, Jiang Zhengnan
