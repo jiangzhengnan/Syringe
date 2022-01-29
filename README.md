@@ -39,13 +39,13 @@ i.putExtra(ProxyStubActivity.INTENT_CLASS_NAME, "com.ng.game.NgGameLevelOneActiv
 i.putExtra(ProxyStubActivity.INTENT_RES_PATH, "/storage/emulated/0/AAAAA/game-debug.apk");
 tartActivity(i);
 ```
-3.hook方式启动热加载的Activity</br>
+3.hook方式启动热加载的Activity(通过Transform+asm实现资源自动注入)</br>
 ```
 Intent i = new Intent(this, HookStubActivity.class);
 i.putExtra("targetActivity", "com.ng.novel.NgNovelActivity");
 startActivity(i);
 ```
-4.
+4.广播动态代理实现</br>
 具体实现参考Demo：
 https://github.com/jiangzhengnan/Syringe/blob/master/app/src/main/java/com/ng/demo/test/MainActivity.java</br>
 
