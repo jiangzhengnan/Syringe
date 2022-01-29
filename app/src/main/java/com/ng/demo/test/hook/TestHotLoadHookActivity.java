@@ -17,8 +17,7 @@ import com.ng.syringe.load.hook.stub.HookStubActivity;
  * @description :
  * <p>
  * 测试通过Hook方式加载各种组件 (VirtualAPK等框架采用的方式)
- * todo
- * 目前需要被代理的Aty主动去反射 addAssetPath 加载资源，不然会出现资源加载不到的问题
+ * 目前需要被代理的Aty主动去反射 AssetManager 的 addAssetPath 加载资源，不然会出现资源加载不到的问题
  * 需要改为自动全局修改
  */
 public class TestHotLoadHookActivity extends Activity implements View.OnClickListener {
@@ -30,7 +29,6 @@ public class TestHotLoadHookActivity extends Activity implements View.OnClickLis
 
         findViewById(R.id.btn_1).setOnClickListener(this);
         setTitle("动态加载(Hook方式)");
-
     }
 
     @SuppressLint("NonConstantResourceId")

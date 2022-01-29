@@ -8,6 +8,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.Settings;
+import android.view.Gravity;
 import android.view.View;
 import android.widget.Button;
 import android.widget.LinearLayout;
@@ -88,6 +89,7 @@ public class MainActivity extends PermissionsActivity {
         Button btn = new Button(this);
         btn.setText(showStr);
         btn.setTextSize(12);
+        btn.setGravity(Gravity.LEFT|Gravity.CENTER_VERTICAL);
         btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

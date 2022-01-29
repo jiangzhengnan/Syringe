@@ -82,11 +82,14 @@ public class Syringe {
     }
 
     /**
-     * todo old 逻辑 改为自动注入？
-     * 注入Resources (Qigsaw逻辑，暂时没有用)
+     * 注入Resources (参考Qigsaw逻辑)
      */
-    public void injectResources(@Nullable Context context, @Nullable Resources resources) {
+    public void injectResources(@Nullable Activity context, @Nullable Resources resources) {
         mLoadComponent.injectResources(context, resources);
+    }
+
+    public static void testinjectResources(@Nullable Activity context, @Nullable Resources resources) {
+
     }
 
 }

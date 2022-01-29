@@ -1,6 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="CompilerConfiguration">
-    <bytecodeTargetLevel target="1.8" />
+    <bytecodeTargetLevel target="1.8">
+      <module name="Syringe.app" target="11" />
+      <module name="Syringe.game" target="11" />
+      <module name="Syringe.novel" target="11" />
+      <module name="Syringe.syringe" target="11" />
+    </bytecodeTargetLevel>
   </component>
 </project>

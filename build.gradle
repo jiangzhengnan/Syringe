@@ -3,12 +3,25 @@ buildscript {
     repositories {
         google()
         mavenCentral()
+        flatDir {
+            dirs './repo/'
+        }
+        // 添加本地maven地址配置
+        maven {
+            url uri("${rootProject.projectDir}/repo")
+        }
+        maven {
+            url 'https://storage.googleapis.com/r8-releases/raw'
+        }
     }
     dependencies {
-        classpath "com.android.tools.build:gradle:4.2.0"
+        classpath "com.android.tools.build:gradle:4.2.2"
 
         // NOTE: Do not place your application dependencies here; they belong
         // in the individual module build.gradle files
+
+        //引入自定义插件
+        classpath "com.ng.syringebuild:syringeBuild:1.0.0"
     }
 }
 
@@ -17,6 +30,16 @@ allprojects {
         google()
         mavenCentral()
         jcenter() // Warning: this repository is going to shut down soon
+        flatDir {
+            dirs './repo/'
+        }
+        // 添加本地maven地址配置
+        maven {
+            url uri("${rootProject.projectDir}/repo")
+        }
+        maven {
+            url 'https://storage.googleapis.com/r8-releases/raw'
+        }
     }
 }
 
