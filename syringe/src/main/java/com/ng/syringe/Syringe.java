@@ -88,8 +88,4 @@ public class Syringe {
         mLoadComponent.injectResources(context, resources);
     }
 
-    public static void testinjectResources(@Nullable Activity context, @Nullable Resources resources) {
-
-    }
-
 }
