@@ -53,7 +53,7 @@ https://github.com/jiangzhengnan/Syringe/blob/master/app/src/main/java/com/ng/de
 - [x] Service和ContentProvider的热加载实现
 - [x] aab方式实现热加载
 - [x] 补丁包版本控制
-- [x] 补丁包差量分析，自定合成
+- [x] 补丁包差量分析，自动合成
 - [x] 打包脚本自动化
 ### License
 
