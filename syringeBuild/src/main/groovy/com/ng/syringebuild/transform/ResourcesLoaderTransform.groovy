@@ -14,7 +14,7 @@ class ResourcesLoaderTransform extends Transform {
 
     private WaitableExecutor waitableExecutor
 
-    private Project project;
+    private Project project
 
     ResourcesLoaderTransform(Project project) {
         this.project = project
